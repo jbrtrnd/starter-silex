@@ -32,8 +32,14 @@ PHP Code sniffer is configured to run in the ``src`` directory using PSR1/2 stan
 grunt phpcs
 ```
 
+#### Running test suite
+PHP Unit is configured to run in the ``tests`` directory.
+```shell
+grunt phpunit
+```
+
 #### Running built-in PHP server
-Run the application with the built-in PHP server on the port 8000.
+Run the application with the built-in PHP server on the port 8000 from the ``src/public`` directory.
 ```shell
 grunt php
 ```

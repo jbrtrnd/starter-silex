@@ -1,5 +1,7 @@
 module.exports = function (grunt) {
-    const SRC_DIRECTORY = 'src';
+    const SRC_DIRECTORY    = 'src';
+    const PUBLIC_DIRECTORY = SRC_DIRECTORY + '/public';
+    const TEST_DIRECTORY   = 'tests';
 
     // Project configuration.
     grunt.initConfig({
@@ -9,7 +11,7 @@ module.exports = function (grunt) {
                 options: {
                     hostname: 'localhost',
                     port: 8000,
-                    base: SRC_DIRECTORY,
+                    base: PUBLIC_DIRECTORY,
                     open: true,
                     keepalive: true
                 }
@@ -23,6 +25,15 @@ module.exports = function (grunt) {
                 bin: 'vendor/bin/phpcs',
                 standard: 'PSR2'
             }
+        },
+        phpunit: {
+            classes: {
+                dir: TEST_DIRECTORY
+            },
+            options: {
+                bin: 'vendor/bin/phpunit',
+                dir : TEST_DIRECTORY
+            }
         }
     });
 
@@ -30,4 +41,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-php');
     // Load the plugin that provides the "phpcs" task.
     grunt.loadNpmTasks('grunt-phpcs');
+    // Load the plugin that provides the "phpunit" task.
+    grunt.loadNpmTasks('grunt-phpunit');
+
+    grunt.registerTask('validate', ['phpcs', 'phpunit']);
 };
