@@ -4,3 +4,7 @@ Thumbs.db
 
 # IDE files and directories
 .idea
+
+# Vendors
+vendor
+node_modules

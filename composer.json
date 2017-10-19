@@ -1,0 +1,15 @@
+{
+  "name": "jbrtrnd/starter-silex",
+  "description": "Project starter built on Silex and Doctrine",
+  "type": "project",
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Jules Bertrand",
+      "email": "jules.brtrnd@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.1"
+  }
+}
