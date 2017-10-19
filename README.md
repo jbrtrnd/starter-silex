@@ -26,10 +26,16 @@ composer install
 
 ### Automated Grunt tasks
 
-#### Code style
+#### Checking code style
 PHP Code sniffer is configured to run in the ``src`` directory using PSR1/2 standard.
 ```shell
 grunt phpcs
+```
+
+#### Running built-in PHP server
+Run the application with the built-in PHP server on the port 8000.
+```shell
+grunt php
 ```
 
 
