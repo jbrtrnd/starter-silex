@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
-    const SRC_DIRECTORY    = 'src';
+    const SRC_DIRECTORY    = __dirname + '/src';
     const PUBLIC_DIRECTORY = SRC_DIRECTORY + '/public';
-    const TEST_DIRECTORY   = 'tests';
+    const TEST_DIRECTORY   = __dirname + '/tests';
 
     // Project configuration.
     grunt.initConfig({
@@ -31,7 +31,9 @@ module.exports = function (grunt) {
             },
             options: {
                 bin: 'vendor/bin/phpunit',
-                dir : TEST_DIRECTORY
+                dir : TEST_DIRECTORY,
+                bootstrap: TEST_DIRECTORY + '/bootstrap.php',
+                colors: true
             }
         }
     });

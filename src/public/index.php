@@ -1,6 +1,6 @@
 <?php
 
-// Reset the execution directory to application root
+// Reset the execution directory to project root
 chdir(dirname(__DIR__));
 
 // Grab the global constants

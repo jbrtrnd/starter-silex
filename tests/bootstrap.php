@@ -1,7 +1,7 @@
 <?php
 
 // Reset the execution directory to application root
-chdir(dirname(__DIR__));
+chdir(dirname(__DIR__ . '/../src/public'));
 
 // Grab the global constants
 require_once 'constants.php';
