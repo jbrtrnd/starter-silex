@@ -20,7 +20,7 @@
     "grunt": "^1.0.1",
     "grunt-php": "^1.5.1",
     "grunt-phpcs": "^0.4.0",
-    "grunt-phpdocumentor": "^0.4.1",
+    "grunt-phpdocumentor": "https://github.com/jbrtrnd/grunt-phpdocumentor/archive/master.tar.gz",
     "grunt-phpunit": "^0.3.6"
   }
 }

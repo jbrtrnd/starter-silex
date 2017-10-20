@@ -13,7 +13,7 @@ use Silex\Application;
 class Bootstrap
 {
     /**
-     * @var Application
+     * @var Application The Silex application
      */
     protected $application;
 
@@ -28,7 +28,9 @@ class Bootstrap
     }
 
     /**
-     * @return Application the Silex application
+     * Return the Silex application
+     *
+     * @return Application The Silex application
      */
     public function getApplication(): Application
     {
@@ -38,7 +40,7 @@ class Bootstrap
     /**
      * Launch the Silex application
      *
-     * From now, the application is able to process HTTP requests.
+     * When calling this function, the application is able to process HTTP requests.
      */
     public function run(): void
     {

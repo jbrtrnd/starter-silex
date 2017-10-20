@@ -2,7 +2,9 @@
 /**
  * Application constants definitions
  *
- * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ * Define the global constants used in the core application, don't put your own constants here.
+ *
+ * @author Jules Bertrand <jules.brtrnd@gmail.com>
  */
 
 // Application environment
