@@ -1,7 +1,8 @@
 module.exports = function (grunt) {
-    const SRC_DIRECTORY    = __dirname + '/src';
-    const PUBLIC_DIRECTORY = SRC_DIRECTORY + '/public';
-    const TEST_DIRECTORY   = __dirname + '/tests';
+    const SRC_DIRECTORY          = __dirname + '/src';
+    const PUBLIC_DIRECTORY       = SRC_DIRECTORY + '/public';
+    const TEST_DIRECTORY         = __dirname + '/tests';
+    const COMPOSER_BIN_DIRECTORY = __dirname + '/vendor/bin';
 
     // Project configuration.
     grunt.initConfig({
@@ -21,7 +22,7 @@ module.exports = function (grunt) {
                 src: [SRC_DIRECTORY + '/**/*.php']
             },
             options: {
-                bin: 'vendor/bin/phpcs',
+                bin: COMPOSER_BIN_DIRECTORY + '/phpcs',
                 standard: 'PSR2'
             }
         },
@@ -30,7 +31,7 @@ module.exports = function (grunt) {
                 dir: TEST_DIRECTORY
             },
             options: {
-                bin: 'vendor/bin/phpunit',
+                bin: COMPOSER_BIN_DIRECTORY + '/phpunit',
                 dir : TEST_DIRECTORY,
                 bootstrap: TEST_DIRECTORY + '/bootstrap.php',
                 colors: true
