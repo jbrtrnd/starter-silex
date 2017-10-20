@@ -6,6 +6,9 @@ A project starter built with [Silex](https://silex.sensiolabs.org/) and [Doctrin
 * [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
     * [Installing dependencies](#installing-dependencies)
+    * [Run](#run)
+* [Overview](#overview)
+    * [Base project structure](#base-project-structure)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -31,11 +34,45 @@ This project starter is using [Grunt](https://gruntjs.com/) to manage integratio
 
 ### Installing dependencies
 
-At the root directory of the starter run :
+At the root directory of the starter, run :
 
 ```shell
 npm install
 composer install
+```
+
+### Run
+
+At the root directory of the starter, run :
+
+```shell
+grunt run
+```
+
+See [Running built-in PHP development server](#running-built-in-php-development-server) for more explanation.
+
+## Overview
+
+### Base project structure
+
+```
+|-- node_modules/      --> Javascript tools installed from NPM
+|-- src/               --> Sources files root directory
+    |-- modules/       --> Modules root directory (write your own modules here !)
+    |-- public/        --> Root directory for webserver (should be the only web-accessible directory)
+        |-- index.php  --> Document root
+    |-- autoload.php   --> Project custom autoload needed to load modules
+    |-- constants.php  --> Project global constants (e.g. paths to config, vendors, modules...)
+|-- tests/
+    |-- src/           --> Tests files root directory
+    |-- bootstrap.php  --> PHPUnit bootstrap file
+|-- vendor/            --> PHP integration tools and libraries installed from Composer
+|-- .gitignore
+|-- composer.json
+|-- composer.lock
+|-- Gruntfile.js       --> Grunt configuration file
+|-- package.json
+|-- package-lock.json
 ```
 
 ## Automated Grunt tasks
