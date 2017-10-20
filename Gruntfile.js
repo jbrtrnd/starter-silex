@@ -36,6 +36,14 @@ module.exports = function (grunt) {
                 bootstrap: TEST_DIRECTORY + '/bootstrap.php',
                 colors: true
             }
+        },
+        phpdocumentor: {
+            dist: {
+                options: {
+                    directory: SRC_DIRECTORY,
+                    target: 'documentation'
+                }
+            }
         }
     });
 
@@ -45,7 +53,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-phpcs');
     // Load the plugin that provides the "phpunit" task.
     grunt.loadNpmTasks('grunt-phpunit');
+    // Load the plugin that provides the "phpdocumentor" task.
+    grunt.loadNpmTasks('grunt-phpdocumentor');
 
+    grunt.registerTask('doc', ['phpdocumentor']);
     grunt.registerTask('style', ['phpcs']);
     grunt.registerTask('test', ['phpunit']);
     grunt.registerTask('run', ['php']);

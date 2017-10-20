@@ -8,3 +8,6 @@ Thumbs.db
 # Vendors
 vendor
 node_modules
+
+# Generated documentation
+documentation
