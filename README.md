@@ -44,21 +44,21 @@ All the following tasks must be ran at root directory of the starter.
 
 ### Checking code style
 ```shell
-grunt phpcs
+grunt style
 ```
 [PHP_CodeSniffer ](https://github.com/squizlabs/PHP_CodeSniffer) is configured to run in the ``src`` directory using PSR1/2 standard.
 
 
 ### Running tests
 ```shell
-grunt phpunit
+grunt test
 ```
 [PHPUnit](https://github.com/sebastianbergmann/phpunit) is configured to run in the ``tests`` directory.
 
 
 ### Running built-in PHP development server
 ```shell
-grunt php
+grunt run
 ```
 Run the application with the built-in PHP server on the port 8000 from the ``src/public`` directory.
 This will not replace a real webserver (eg. Apache, Nginx), so it's not recommended to use it in production.

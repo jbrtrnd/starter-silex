@@ -45,5 +45,7 @@ module.exports = function (grunt) {
     // Load the plugin that provides the "phpunit" task.
     grunt.loadNpmTasks('grunt-phpunit');
 
-    grunt.registerTask('validate', ['phpcs', 'phpunit']);
+    grunt.registerTask('style', ['phpcs']);
+    grunt.registerTask('test', ['phpunit']);
+    grunt.registerTask('run', ['php']);
 };
