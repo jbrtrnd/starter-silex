@@ -1,4 +1,9 @@
 <?php
+/**
+ * Application document root
+ *
+ * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ */
 
 // Reset the execution directory to project root
 chdir(dirname(__DIR__));

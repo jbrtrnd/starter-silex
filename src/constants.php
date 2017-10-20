@@ -1,4 +1,9 @@
 <?php
+/**
+ * Application constants definitions
+ *
+ * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ */
 
 // Application environment
 define('APP_ENV', getenv('APP_ENV'));
