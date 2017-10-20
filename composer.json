@@ -15,6 +15,7 @@
     "symfony/browser-kit": "^3.3"
   },
   "require": {
-    "silex/silex": "^2.2"
+    "silex/silex": "^2.2",
+    "symfony/console": "^3.3"
   }
 }

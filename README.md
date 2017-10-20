@@ -9,6 +9,7 @@ A project starter built with [Silex](https://silex.sensiolabs.org/) and [Doctrin
     * [Run](#run)
 * [Overview](#overview)
     * [Base project structure](#base-project-structure)
+    * [Console mode](#console-mode)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -57,6 +58,8 @@ See [Running built-in PHP development server](#running-built-in-php-development-
 ### Base project structure
 
 ```
+|-- bin/
+    |-- console        --> PHP executable file to run the console mode
 |-- node_modules/      --> Javascript tools installed from NPM
 |-- src/               --> Sources files root directory
     |-- modules/       --> Modules root directory (write your own modules here !)
@@ -74,6 +77,15 @@ See [Running built-in PHP development server](#running-built-in-php-development-
 |-- Gruntfile.js       --> Grunt configuration file
 |-- package.json
 |-- package-lock.json
+```
+
+### Console mode
+
+The starter provide a console mode based on the Symfony Console component.
+
+At the root directory of the starter, run the following command to get the list of available commands :
+```shell
+php bin/console
 ```
 
 ## Automated Grunt tasks
