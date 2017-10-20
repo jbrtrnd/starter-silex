@@ -1,4 +1,9 @@
 <?php
+/**
+ * Application constants definitions
+ *
+ * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ */
 
 // Application environment
 define('APP_ENV', getenv('APP_ENV'));
@@ -7,7 +12,7 @@ define('APP_ENV', getenv('APP_ENV'));
 define('DIR_VENDORS', '../vendor');
 
 // Directory containing application modules
-define('DIR_MODULES', 'modules');
+define('DIR_MODULES', 'module');
 
 // Directory containing the gloabal configuration
 define('DIR_CONFIG', 'config');

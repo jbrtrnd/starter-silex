@@ -12,6 +12,7 @@ A project starter built with [Silex](https://silex.sensiolabs.org/) and [Doctrin
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
+    * [Generate API documentation](#generate-api-documentation)
     * [Running built-in PHP development server](#running-built-in-php-development-server)
     
 
@@ -91,6 +92,13 @@ Using [PHP_CodeSniffer ](https://github.com/squizlabs/PHP_CodeSniffer), configur
 grunt test
 ```
 Using [PHPUnit](https://github.com/sebastianbergmann/phpunit), configured to run in the ``tests`` directory.
+
+### Generate API documentation
+```shell
+grunt doc
+```
+Using [phpDocumentor](https://www.phpdoc.org/), configured to run in the ``src`` directory. Will generate the HTML
+documentation in the ``documentation`` directory. 
 
 
 ### Running built-in PHP development server
