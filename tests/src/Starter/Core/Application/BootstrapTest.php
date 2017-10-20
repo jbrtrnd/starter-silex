@@ -3,16 +3,16 @@
 namespace Starter\Core\Application;
 
 use Silex\Application;
-use Silex\WebTestCase;
+use Test\BootstrapTestCase;
 
-class BootstrapTest extends WebTestCase
+/**
+ * Class BootstrapTest
+ *
+ * @package Starter\Core\Application
+ * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ */
+class BootstrapTest extends BootstrapTestCase
 {
-    public function createApplication()
-    {
-        $bootstrap = new Bootstrap();
-        return $bootstrap->getApplication();
-    }
-
     /**
      * Test if the Bootstrap instance creates a Silex application
      */

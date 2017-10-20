@@ -3,6 +3,7 @@
 namespace Starter\Core\Application;
 
 use Silex\Application;
+use Starter\Core\Module\Loader\ServiceProvider as ModuleLoaderServiceProvider;
 
 /**
  * Wrapper around a Silex application
@@ -20,11 +21,13 @@ class Bootstrap
     /**
      * Bootstrap constructor
      *
-     * Will create the Silex application without launching it.
+     * Will create the Silex application and register the required services.
      */
     public function __construct()
     {
         $this->application = new Application();
+
+        $this->application->register(new ModuleLoaderServiceProvider());
     }
 
     /**

@@ -7,7 +7,9 @@ chdir(dirname(__DIR__ . '/../src/public'));
 require_once 'constants.php';
 
 // Init the autoloader
-require_once 'autoload.php';
+$loader = require_once 'autoload.php';
+$loader->addPsr4('Test\\', __DIR__ . '/utils');
+
 
 if (!class_exists('\PHPUnit\Framework\TestCase', true)) {
     class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');

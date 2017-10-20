@@ -10,6 +10,7 @@ A project starter built with [Silex](https://silex.sensiolabs.org/) and [Doctrin
 * [Overview](#overview)
     * [Base project structure](#base-project-structure)
     * [Console mode](#console-mode)
+* [Create your own module](#create-your-own-module)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -63,12 +64,16 @@ See [Running built-in PHP development server](#running-built-in-php-development-
 |-- node_modules/      --> Javascript tools installed from NPM
 |-- src/               --> Sources files root directory
     |-- modules/       --> Modules root directory (write your own modules here !)
+        |-- Starter    --> Starter internal module, do not delete this directory !
+        |-- Example    --> An example of custom module
     |-- public/        --> Root directory for webserver (should be the only web-accessible directory)
         |-- index.php  --> Document root
     |-- autoload.php   --> Project custom autoload needed to load modules
     |-- constants.php  --> Project global constants (e.g. paths to config, vendors, modules...)
 |-- tests/
     |-- src/           --> Tests files root directory
+        |-- Starter    --> Tests of the Starter module (do no delete)
+    |-- utils/         --> Some tests utilities
     |-- bootstrap.php  --> PHPUnit bootstrap file
 |-- vendor/            --> PHP integration tools and libraries installed from Composer
 |-- .gitignore
@@ -87,6 +92,15 @@ At the root directory of the starter, run the following command to get the list 
 ```shell
 php bin/console
 ```
+
+To execute a specific command, run the following :
+```shell
+php bin/console <command>
+```
+
+## Create your own module
+
+TODO
 
 ## Automated Grunt tasks
 

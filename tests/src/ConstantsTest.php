@@ -2,6 +2,11 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ConstantsTest
+ *
+ * @author Jules Bertrand <jules.brtrnd@gmail.com>
+ */
 class ConstantsTest extends TestCase
 {
     public function testConstantsDefined()
