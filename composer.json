@@ -12,5 +12,9 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.1",
     "phpunit/phpunit": "^6.4"
+  },
+  "require": {
+    "php": "^7.1",
+    "silex/silex": "^2.2"
   }
 }
