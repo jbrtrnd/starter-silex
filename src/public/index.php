@@ -16,3 +16,4 @@ require_once 'autoload.php';
 
 // Bootstrap the application
 $bootstrap = new Starter\Core\Application\Bootstrap();
+$bootstrap->run();
