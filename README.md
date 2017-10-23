@@ -18,6 +18,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Module skeleton](#module-skeleton)
     * [The Module class](#the-module-class)
     * [Controllers and Routes](#controllers-and-routes)
+    * [Middlewares](#middlewares)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -274,6 +275,59 @@ In this case, if we access the url ``localhost:8000/myPage`` with a GET http met
 (others http methods will not work and send a 405 Method Not Allowed response).
 We can define differents controllers and functions depending on which method we're accessing the URL. We can also allow only certains HTTP methods
 by don't put them in the array key.
+
+### Middlewares
+
+As Silex provide the functionnality to affect "before" and "after" middlewares to routes we can do the same thing with the starter.
+
+To create a Middleware, create a class which extends the abstract ``StarterMiddleware`` class. You must write the ``call()`` function taht will be 
+called when the middleware will be executed (after and/or before).
+
+To set the middleware to a route, let's get back to the routes configuration file :
+
+```php
+<?php
+    
+namespace MyModule;
+    
+use MyModule\Middleware\MyMiddleware;
+use MyModule\Middleware\MySecondMiddleware;
+use MyModule\Middleware\MyThirdMiddleware;
+use Silex\Application;
+    
+return [
+    ...
+    'routes' => [
+        '/myPage' => [  
+            'GET' => [  
+                'controller' => 'myModule.controller.index', 
+                'action'     => 'myPage',                    
+                'before'     => [               // The "before" middlewares for this route   
+                    MyMiddleware::class, 
+                    MySecondMiddleware::class           
+                ],
+            ],
+            'POST' => [  
+                'controller' => 'myModule.controller.index', 
+                'action'     => 'myAction',                  
+                'after'     => [                // The "after" middlewares for this route   
+                    MyThirdMiddleware::class     
+                ],
+            ],
+        ],
+        ...
+    ]
+];
+    
+```
+
+Just add the ``after`` and/or ``before`` key to your route definition with an array containing the classes of the middlewares
+that you want to execute.
+
+Inside the ``call()`` function, you'll have access to the ``$this->request`` (current HTTP request) and 
+``$this->application`` (Silex application).
+Return ``null`` if the request should continue to the next processing or return a ``Reponse`` if you want to stop the 
+request processing at the middleware.
 
 ## Automated Grunt tasks
 

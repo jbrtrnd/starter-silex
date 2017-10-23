@@ -7,6 +7,7 @@
 
 namespace Example;
 
+use Example\Middleware\ExampleMiddleware;
 use Silex\Application;
 
 return [
@@ -19,11 +20,17 @@ return [
         '/example' => [
             'GET' => [
                 'controller' => 'example.controller.example',
-                'action'     => 'html'
+                'action'     => 'html',
+                'before'     => [
+                    ExampleMiddleware::class
+                ]
             ],
             'POST,PUT' => [
                 'controller' => 'example.controller.example',
                 'action'     => 'json',
+                'before'     => [
+                    ExampleMiddleware::class
+                ]
             ],
         ]
     ]

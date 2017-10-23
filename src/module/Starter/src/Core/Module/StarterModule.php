@@ -3,8 +3,12 @@
 namespace Starter\Core\Module;
 
 use Pimple\Container;
+use Silex\Application;
 use Starter\Core\Configuration\Configuration;
 use Starter\Core\Configuration\Factory as ConfigurationFactory;
+use Starter\Core\Module\Loader\Exception\WrongMiddlewareClassException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -15,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package Starter\Core\Module
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
-class StarterModule
+abstract class StarterModule
 {
     /**
      * @var Container The Silex container.
@@ -111,16 +115,56 @@ class StarterModule
         $key = 'routes';
 
         if ($this->configuration->offsetExists($key)) {
-            foreach ($this->configuration->offsetGet($key) as $url => $routes) {
+            foreach ($this->configuration->offsetGet($key) as $url => $entries) {
                 // For each url, assign the OPTIONS method (called by browser) and returns a default response
                 $this->application->options($url, function () {
                     return new Response();
                 });
 
-                foreach ($routes as $methods => $route) {
+                foreach ($entries as $methods => $definition) {
                     foreach (explode(',', $methods) as $method) {
-                        $action = $route['controller'] . ':' . $route['action'];
-                        $this->application->{$method}($url, $action);
+                        $controller = $definition['controller'];
+                        $action     = $definition['action'];
+
+                        $route = $this->application->{$method}($url, $controller . ':' . $action);
+
+                        // Before middlewares
+                        if (isset($definition['before'])) {
+                            $middlewares = $definition['before'];
+
+                            if (!is_array($middlewares)) {
+                                $middlewares = [$middlewares];
+                            }
+
+                            foreach ($middlewares as $class) {
+                                $route->before(function (Request $request, Application $application) use ($class) {
+                                    $middleware = new $class($request, $application);
+                                    if (!$middleware instanceof StarterMiddleware) {
+                                        throw new WrongMiddlewareClassException($class);
+                                    }
+                                    return $middleware->call();
+                                });
+                            }
+                        }
+
+                        // After middlewares
+                        if (isset($definition['after'])) {
+                            $middlewares = $definition['after'];
+
+                            if (!is_array($middlewares)) {
+                                $middlewares = [$middlewares];
+                            }
+
+                            foreach ($middlewares as $class) {
+                                $route->after(function (Request $request, JsonResponse $response, Application $application) use ($class) {
+                                    $middleware = new $class($request, $application);
+                                    if (!$middleware instanceof StarterMiddleware) {
+                                        throw new WrongMiddlewareClassException($class);
+                                    }
+                                    return $middleware->call();
+                                });
+                            }
+                        }
                     }
                 }
             }

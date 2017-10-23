@@ -2,6 +2,9 @@
 
 namespace TestModule;
 
+use TestModule\Middleware\AfterMiddleware;
+use TestModule\Middleware\BeforeMiddleware;
+
 return [
     'controllers' => [
         'test.controller.test' => new Controller\TestController()
@@ -10,7 +13,13 @@ return [
         '/test_module_loaded' => [
             'GET,POST' => [
                 'controller' => 'test.controller.test',
-                'action'     => 'index'
+                'action'     => 'index',
+                'before'     => [
+                    BeforeMiddleware::class
+                ],
+                'after'      => [
+                    AfterMiddleware::class
+                ]
             ]
         ]
     ]
