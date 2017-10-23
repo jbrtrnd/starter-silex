@@ -306,8 +306,3 @@ grunt run
 ```
 Run the application with the built-in PHP server on the port ``8000`` from the ``src/public`` directory.
 This will not replace a real webserver (eg. Apache, Nginx), so **it's not recommended to use it in production**.
-
-
-
-
-
