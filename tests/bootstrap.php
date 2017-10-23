@@ -9,6 +9,7 @@ require_once 'constants.php';
 // Init the autoloader
 $loader = require_once 'autoload.php';
 $loader->addPsr4('Test\\', __DIR__ . '/utils');
+$loader->addPsr4('TestModule\\', __DIR__ . '/src/Starter/Core/Module/TestModule/src/');
 
 
 if (!class_exists('\PHPUnit\Framework\TestCase', true)) {

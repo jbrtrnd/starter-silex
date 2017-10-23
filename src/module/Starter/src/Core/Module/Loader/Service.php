@@ -41,7 +41,7 @@ class Service
         $this->application = $application;
         $this->loaded      = false;
 
-        $this->browseModules();
+        $this->retrieveModules();
     }
 
     /**
@@ -55,30 +55,11 @@ class Service
             $module->load();
         }
 
-        $this->loaded = true;
-    }
-
-    /**
-     * Browse the modules to load.
-     *
-     * The modules are set in the $modules property with their name as key and the Module class instance as value.
-     *
-     * @return void
-     * @throws ModuleClassNotFoundException If the Module class doesn't exist in the module src directory.
-     */
-    protected function browseModules(): void
-    {
-        foreach (scandir(DIR_MODULES) as $module) {
-            $path = DIR_MODULES . '/' . $module;
-            if (is_dir($path) && $module !== '.' && $module !== '..') {
-                $className = $module . '\Module';
-                if (!class_exists($className)) {
-                    throw new ModuleClassNotFoundException($module);
-                }
-
-                $this->modules[$module] = new $className($this->application);
-            }
+        foreach ($this->modules as $module) {
+            $module->afterApplicationLoad();
         }
+
+        $this->loaded = true;
     }
 
     /**
@@ -99,5 +80,44 @@ class Service
     public function getModules(): array
     {
         return $this->modules;
+    }
+
+    /**
+     * Set the modules.
+     *
+     * @param StarterModule[] $modules
+     * @return void
+     */
+    public function setModules(array $modules): void
+    {
+        $this->modules = $modules;
+    }
+
+    /**
+     * Retrieve the modules to load.
+     *
+     * The modules are set in the $modules property with their name as key and the Module class instance as value.
+     * The Starter Module will always be first because it must be loaded first.
+     *
+     * @return void
+     * @throws ModuleClassNotFoundException If the Module class doesn't exist in the module src directory.
+     */
+    protected function retrieveModules(): void
+    {
+        foreach (scandir(DIR_MODULES) as $module) {
+            $path = DIR_MODULES . '/' . $module;
+            if (is_dir($path) && $module !== '.' && $module !== '..') {
+                $className = $module . '\Module';
+                if (!class_exists($className)) {
+                    throw new ModuleClassNotFoundException($module);
+                }
+
+                $this->modules[$module] = new $className($this->application);
+            }
+        }
+
+        uksort($this->modules, function (string $a, string $b) {
+            return ($a === 'Starter' ? 1 : ($b === 'Starter' ? -1 : 0));
+        });
     }
 }

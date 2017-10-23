@@ -31,9 +31,9 @@ class ExampleController
      *
      * @return Response
      */
-    public function html()
+    public function html(): Response
     {
-        return new Response();
+        return new Response('Example as HTML');
     }
 
     /**
@@ -41,8 +41,8 @@ class ExampleController
      *
      * @return Response
      */
-    public function json()
+    public function json(): JsonResponse
     {
-        return new JsonResponse();
+        return new JsonResponse(['Example as JSON']);
     }
 }

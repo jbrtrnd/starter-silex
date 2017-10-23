@@ -3,6 +3,9 @@
 namespace Starter\Core\Module;
 
 use Pimple\Container;
+use Starter\Core\Configuration\Configuration;
+use Starter\Core\Configuration\Factory as ConfigurationFactory;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * The starter module base class.
@@ -25,6 +28,16 @@ class StarterModule
     protected $loaded;
 
     /**
+     * @var string The directory containing the module (not the Module class).
+     */
+    protected $directory;
+
+    /**
+     * @var Configuration The module configuration retrieved from the config directory.
+     */
+    protected $configuration;
+
+    /**
      * StarterModule constructor.
      *
      * @param Container $application The Silex container.
@@ -33,6 +46,11 @@ class StarterModule
     {
         $this->application = $application;
         $this->loaded      = false;
+
+        $reflection = new \ReflectionClass($this);
+        $this->directory = dirname($reflection->getFileName(), 2);
+
+        $this->configuration = ConfigurationFactory::fromDirectory($this->directory . '/config');
     }
 
     /**
@@ -43,6 +61,11 @@ class StarterModule
     public function load(): void
     {
         if (!$this->loaded) {
+            $this->loadControllers();
+            $this->loadRoutes();
+
+            $this->afterLoad();
+
             $this->loaded = true;
         }
     }
@@ -55,5 +78,72 @@ class StarterModule
     public function isLoaded(): bool
     {
         return $this->loaded;
+    }
+
+    /**
+     * Load the controllers from the configurations files in the Silex container.
+     *
+     * The controllers must be at the "controllers" key, see
+     * {@link https://silex.symfony.com/doc/2.0/providers/service_controller.html}.
+     *
+     * @return void
+     */
+    protected function loadControllers(): void
+    {
+        $key = 'controllers';
+
+        if ($this->configuration->offsetExists($key)) {
+            foreach ($this->configuration->offsetGet($key) as $name => $controller) {
+                $this->application[$name] = $controller;
+            }
+        }
+    }
+
+    /**
+     * Load the routes from the configurations files in the Silex container.
+     *
+     * The routes must be at the "routes" key.
+     *
+     * @return void
+     */
+    protected function loadRoutes(): void
+    {
+        $key = 'routes';
+
+        if ($this->configuration->offsetExists($key)) {
+            foreach ($this->configuration->offsetGet($key) as $url => $routes) {
+                // For each url, assign the OPTIONS method (called by browser) and returns a default response
+                $this->application->options($url, function () {
+                    return new Response();
+                });
+
+                foreach ($routes as $methods => $route) {
+                    foreach (explode(',', $methods) as $method) {
+                        $action = $route['controller'] . ':' . $route['action'];
+                        $this->application->{$method}($url, $action);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Execute some code when the module is loaded.
+     *
+     * @return void
+     */
+    protected function afterLoad(): void
+    {
+    }
+
+    /**
+     * Execute some code when all the modules are loaded.
+     *
+     * Called in the Module service loader.
+     *
+     * @return void
+     */
+    public function afterApplicationLoad(): void
+    {
     }
 }
