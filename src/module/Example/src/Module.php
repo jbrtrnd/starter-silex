@@ -14,11 +14,24 @@ class Module extends StarterModule
 {
     protected function afterLoad(): void
     {
-        $this->application['example.something_after_load'] = 'FOO';
+        /**
+         * $this->application['example.something_after_load'] = 'FOO';
+         * $this->application->register(new Silex\Provider\VarDumperServiceProvider());
+         */
     }
 
     public function afterApplicationLoad(): void
     {
-        $this->application['example.something_after_application_load'] = 'BAR';
+        /**
+         * $app['swiftmailer.options'] = array(
+         *     'host' => 'host',
+         *     'port' => '25',
+         *     'username' => 'username',
+         *     'password' => 'password',
+         *     'encryption' => null,
+         *     'auth_mode' => null
+         * );
+         * $this->application->register(new Silex\Provider\SwiftmailerServiceProvider());
+         */
     }
 }
