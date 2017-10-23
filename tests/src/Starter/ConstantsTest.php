@@ -1,5 +1,7 @@
 <?php
 
+namespace Starter;
+
 use PHPUnit\Framework\TestCase;
 
 /**

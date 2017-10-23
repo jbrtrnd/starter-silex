@@ -29,11 +29,19 @@ This project starter is using [Grunt](https://gruntjs.com/) to manage integratio
 
 * [npm](https://www.npmjs.com/get-npm) 
 
-    Needed to install Javascript tools (e.g. Grunt).
+    Needed to install Javascript tools (e.g. Grunt plugins).
 
 * [Composer](https://getcomposer.org/download/)
 
     Needed to install PHP tools and libraries (e.g. Silex, Doctrine, integration tools...).
+
+* [Grunt](https://gruntjs.com/)
+    
+    A Grunt package is provided by npm with the ``package.json`` file but you may install it globally with the following command :
+    
+    ```shell
+    npm install -g grunt
+    ```
 
 ### Installing dependencies
 
