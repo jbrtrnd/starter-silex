@@ -19,6 +19,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [The Module class](#the-module-class)
     * [Controllers and Routes](#controllers-and-routes)
     * [Middlewares](#middlewares)
+    * [Console commands](#console-commands)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -161,19 +162,23 @@ class Module extends StarterModule
     
 ```
 
-In the Module class you can overwrite two functions :
+In the Module class you can overwrite three functions :
 
 - ``afterLoad()``
 
-To execute some code after your module has finished loading
+To execute some code after your module is loaded
 
 - ``afterApplicationLoad()``
 
-To execute some code after the application (all the modules) has finished loading
+To execute some code after the application (all the modules) is loaded
 
-In this two functions, you can access the Silex application with the property ``$this->application``, so you can register
+- ``afterConsoleLoad(Console $console)``
+
+To execute some code after the application (all the modules) is loaded in console mode 
+(you can get the console application passed in parameters).
+
+In this three functions, you can access the Silex application with the property ``$this->application``, so you can register
 new services, add Doctrine functionalities etc...
-
 
 ### Controllers and Routes
 
@@ -328,6 +333,8 @@ Inside the ``call()`` function, you'll have access to the ``$this->request`` (cu
 ``$this->application`` (Silex application).
 Return ``null`` if the request should continue to the next processing or return a ``Reponse`` if you want to stop the 
 request processing at the middleware.
+
+### Console commands
 
 ## Automated Grunt tasks
 

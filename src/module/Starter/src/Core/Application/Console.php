@@ -26,6 +26,8 @@ class Console extends Bootstrap
     {
         parent::__construct();
         $this->console = new Application();
+
+        $this->loadCommands();
     }
 
     /**
@@ -48,5 +50,19 @@ class Console extends Bootstrap
     public function run(): void
     {
         $this->console->run();
+    }
+
+    /**
+     * Loads the modules commands.
+     *
+     * @return void
+     */
+    public function loadCommands(): void
+    {
+        $modules = $this->application['starter.module.loader']->getModules();
+
+        foreach ($modules as $module) {
+            $module->afterConsoleLoad($this->console);
+        }
     }
 }

@@ -17,7 +17,7 @@ class WrongMiddlewareClassException extends \Exception
     /**
      * Construct the exception.
      *
-     * @param string $module The module name where the Module class is missing.
+     * @param string $class The class name of the middleware.
      * @param int $code The Exception code.
      * @param Throwable $previous The previous throwable used for the exception chaining.
      */

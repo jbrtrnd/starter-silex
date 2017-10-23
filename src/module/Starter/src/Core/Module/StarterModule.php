@@ -7,9 +7,11 @@ use Silex\Application;
 use Starter\Core\Configuration\Configuration;
 use Starter\Core\Configuration\Factory as ConfigurationFactory;
 use Starter\Core\Module\Loader\Exception\WrongMiddlewareClassException;
+use Symfony\Component\Console\Application as Console;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * The starter module base class.
@@ -137,13 +139,18 @@ abstract class StarterModule
                             }
 
                             foreach ($middlewares as $class) {
-                                $route->before(function (Request $request, Application $application) use ($class) {
-                                    $middleware = new $class($request, $application);
-                                    if (!$middleware instanceof StarterMiddleware) {
-                                        throw new WrongMiddlewareClassException($class);
+                                $route->before(
+                                    function (
+                                        Request $request,
+                                        Application $application
+                                    ) use ($class) {
+                                        $middleware = new $class($request, $application);
+                                        if (!$middleware instanceof StarterMiddleware) {
+                                            throw new WrongMiddlewareClassException($class);
+                                        }
+                                        return $middleware->call();
                                     }
-                                    return $middleware->call();
-                                });
+                                );
                             }
                         }
 
@@ -156,13 +163,19 @@ abstract class StarterModule
                             }
 
                             foreach ($middlewares as $class) {
-                                $route->after(function (Request $request, JsonResponse $response, Application $application) use ($class) {
-                                    $middleware = new $class($request, $application);
-                                    if (!$middleware instanceof StarterMiddleware) {
-                                        throw new WrongMiddlewareClassException($class);
+                                $route->after(
+                                    function (
+                                        Request $request,
+                                        JsonResponse $response,
+                                        Application $application
+                                    ) use ($class) {
+                                        $middleware = new $class($request, $application);
+                                        if (!$middleware instanceof StarterMiddleware) {
+                                            throw new WrongMiddlewareClassException($class);
+                                        }
+                                        return $middleware->call();
                                     }
-                                    return $middleware->call();
-                                });
+                                );
                             }
                         }
                     }
@@ -188,6 +201,17 @@ abstract class StarterModule
      * @return void
      */
     public function afterApplicationLoad(): void
+    {
+    }
+
+    /**
+     * Execute some code when all the modules are loaded, in console mode.
+     *
+     * Called in Console application.
+     *
+     * @return void
+     */
+    public function afterConsoleLoad(Console $console): void
     {
     }
 }

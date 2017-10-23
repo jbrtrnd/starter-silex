@@ -2,6 +2,7 @@
 
 namespace Starter\Core\Module;
 
+use Starter\Core\Application\Console;
 use Starter\Core\Module\Loader\Service;
 use Test\BootstrapTestCase;
 use TestModule\Controller\TestController;
