@@ -14,7 +14,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Base project structure](#base-project-structure)
     * [Console mode](#console-mode)
 * [Create your own module](#create-your-own-module)
-    * [What is a Module ?](#what-is-a-module)
+    * [What is a Module ?](#what-is-a-module-)
     * [Module skeleton](#module-skeleton)
     * [The Module class](#the-module-class)
     * [Controllers and Routes](#controllers-and-routes)
