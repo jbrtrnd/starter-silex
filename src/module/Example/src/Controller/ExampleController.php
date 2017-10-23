@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * An example controller
+ * An example controller.
  *
  * @package Example\Controller
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 class ExampleController
 {
     /**
-     * ExampleController constructor
+     * ExampleController constructor.
      *
-     * The Silex container is injected by the factory written in the routes.config.php.
+     * The Silex container is injected by the factory written in the routes.config.php..
      *
      * @param Application $application Silex container
      */
@@ -27,7 +27,7 @@ class ExampleController
     }
 
     /**
-     * Example of action returning a HTML response
+     * Example of action returning a HTML response.
      *
      * @return Response
      */
@@ -37,7 +37,7 @@ class ExampleController
     }
 
     /**
-     * Example of action returning a JSON response
+     * Example of action returning a JSON response.
      *
      * @return Response
      */

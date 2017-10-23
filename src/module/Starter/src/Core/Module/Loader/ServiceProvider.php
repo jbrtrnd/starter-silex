@@ -6,7 +6,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * Module loader service provider
+ * Module loader service provider.
  *
  * Launch the Module loader.
  *
@@ -16,13 +16,14 @@ use Pimple\ServiceProviderInterface;
 class ServiceProvider implements ServiceProviderInterface
 {
     /**
-     * Register the module loader service
+     * Register the module loader service.
      *
      * The module loader will be available at the "starter.module.loader" key.
      *
-     * @param Container $application The Silex container
+     * @param Container $application The Silex container.
+     * @return void
      */
-    public function register(Container $application)
+    public function register(Container $application): void
     {
         $loader = new Service($application);
         $loader->load();

@@ -3,9 +3,9 @@
 namespace Example\Entity;
 
 /**
- * Class Foo
+ * Class Foo.
  *
- * An example of Doctrine entity
+ * An example of Doctrine entity.
  *
  * @package Example\Entity
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
@@ -13,12 +13,12 @@ namespace Example\Entity;
 class Foo
 {
     /**
-     * @var string A random property
+     * @var string A random property.
      */
     protected $bar;
 
     /**
-     * Return the bar property value
+     * Return the bar property value.
      *
      * @return string The bar property value
      */
@@ -28,11 +28,12 @@ class Foo
     }
 
     /**
-     * Set the bar property value
+     * Set the bar property value.
      *
-     * @param string $bar Value to set
+     * @param string $bar Value to set.
+     * @return void
      */
-    public function setBar(string $bar)
+    public function setBar(string $bar): void
     {
         $this->bar = $bar;
     }

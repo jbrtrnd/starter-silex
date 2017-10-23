@@ -1,6 +1,6 @@
 <?php
 /**
- * Application document root
+ * Application document root.
  *
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */

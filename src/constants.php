@@ -1,6 +1,6 @@
 <?php
 /**
- * Application constants definitions
+ * Application constants definitions.
  *
  * Define the global constants used in the core application, don't put your own constants here.
  *

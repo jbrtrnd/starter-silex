@@ -1,6 +1,6 @@
 <?php
 /**
- * Routes for the Example module
+ * Routes for the Example module.
  *
  * @author Jules Bertrand <jules.brtrnd@gmail.com>
  */

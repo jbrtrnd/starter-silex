@@ -5,7 +5,7 @@ namespace Starter\Core\Application;
 use Symfony\Component\Console\Application;
 
 /**
- * Wrapper around a Symfony console application
+ * Wrapper around a Symfony console application.
  *
  * @package Starter\Core\Application
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
@@ -13,12 +13,12 @@ use Symfony\Component\Console\Application;
 class Console extends Bootstrap
 {
     /**
-     * @var Application The Symfony console application
+     * @var Application The Symfony console application.
      */
     protected $console;
 
     /**
-     * Console constructor
+     * Console constructor.
      *
      * Will create the Symfony console application without launching it.
      */
@@ -29,9 +29,9 @@ class Console extends Bootstrap
     }
 
     /**
-     * Return the Symfony console application
+     * Return the Symfony console application.
      *
-     * @return Application The Symfony console application
+     * @return Application The Symfony console application.
      */
     public function getConsole(): Application
     {
@@ -39,9 +39,11 @@ class Console extends Bootstrap
     }
 
     /**
-     * Launch the Symfony console application
+     * Launch the Symfony console application.
      *
      * When calling this function, the console application is able to process input commands.
+     *
+     * @return void
      */
     public function run(): void
     {

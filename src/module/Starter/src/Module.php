@@ -5,7 +5,7 @@ namespace Starter;
 use Starter\Core\Module\StarterModule;
 
 /**
- * Module class for the Starter module
+ * Module class for the Starter module.
  *
  * @package Starter
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>

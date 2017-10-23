@@ -5,7 +5,7 @@ namespace Starter\Core\Module\Loader\Exception;
 use Throwable;
 
 /**
- * Class ModuleClassNotFoundException
+ * Class ModuleClassNotFoundException.
  *
  * Exception thrown is the Module class is missing for a module.
  *
@@ -15,12 +15,11 @@ use Throwable;
 class ModuleClassNotFoundException extends \Exception
 {
     /**
-     * Construct the exception
+     * Construct the exception.
      *
-     * @param string $module The module name where the Module class is missing
+     * @param string $module The module name where the Module class is missing.
      * @param int $code The Exception code.
      * @param Throwable $previous The previous throwable used for the exception chaining.
-     * @since 5.1.0
      */
     public function __construct($module, $code = 0, Throwable $previous = null)
     {

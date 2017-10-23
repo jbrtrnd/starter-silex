@@ -5,7 +5,7 @@ namespace Starter\Core\Module;
 use Pimple\Container;
 
 /**
- * The starter module base class
+ * The starter module base class.
  *
  * Every custom module must have a Module class definition in their src directory.
  *
@@ -15,19 +15,19 @@ use Pimple\Container;
 class StarterModule
 {
     /**
-     * @var Container The Silex container
+     * @var Container The Silex container.
      */
     protected $application;
 
     /**
-     * @var bool Indicate if the module is loaded
+     * @var bool Indicate if the module is loaded.
      */
     protected $loaded;
 
     /**
      * StarterModule constructor.
      *
-     * @param Container $application The Silex container
+     * @param Container $application The Silex container.
      */
     public function __construct(Container $application)
     {
@@ -36,9 +36,11 @@ class StarterModule
     }
 
     /**
-     * Load the current module in the Silex container
+     * Load the current module in the Silex container.
+     *
+     * @return void
      */
-    public function load()
+    public function load(): void
     {
         if (!$this->loaded) {
             $this->loaded = true;
@@ -46,11 +48,11 @@ class StarterModule
     }
 
     /**
-     * Return true if the module is loaded
+     * Return true if the module is loaded.
      *
-     * @return bool The loaded state
+     * @return bool The loaded state.
      */
-    public function isLoaded()
+    public function isLoaded(): bool
     {
         return $this->loaded;
     }
