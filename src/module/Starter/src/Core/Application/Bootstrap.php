@@ -5,6 +5,7 @@ namespace Starter\Core\Application;
 use Silex\Application;
 use Starter\Core\Configuration\ServiceProvider as ConfigurationServiceProvider;
 use Starter\Core\Module\Loader\ServiceProvider as ModuleLoaderServiceProvider;
+use Starter\Doctrine\ServiceProvider as DoctrineServiceProvider;
 
 /**
  * Wrapper around a Silex application.

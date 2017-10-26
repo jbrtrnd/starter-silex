@@ -1,7 +1,7 @@
 {
   "name": "jbrtrnd/starter-silex",
   "description": "Project starter built on Silex and Doctrine",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "project",
   "license": "ISC",
   "authors": [
@@ -17,6 +17,8 @@
   },
   "require": {
     "silex/silex": "^2.2",
-    "symfony/console": "^3.3"
+    "symfony/console": "^3.3",
+    "doctrine/dbal": "^2.6",
+    "dflydev/doctrine-orm-service-provider": "^2.0"
   }
 }

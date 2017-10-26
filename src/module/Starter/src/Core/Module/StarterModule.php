@@ -3,12 +3,11 @@
 namespace Starter\Core\Module;
 
 use Pimple\Container;
-use Silex\Application;
+use Silex\Controller;
 use Starter\Core\Configuration\Configuration;
 use Starter\Core\Configuration\Factory as ConfigurationFactory;
 use Starter\Core\Module\Loader\Exception\WrongMiddlewareClassException;
 use Symfony\Component\Console\Application as Console;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,6 +67,7 @@ abstract class StarterModule
         if (!$this->loaded) {
             $this->loadControllers();
             $this->loadRoutes();
+            $this->loadMapping();
 
             $this->afterLoad();
 
@@ -129,57 +129,82 @@ abstract class StarterModule
 
                         $route = $this->application->{$method}($url, $controller . ':' . $action);
 
-                        // Before middlewares
-                        if (isset($definition['before'])) {
-                            $middlewares = $definition['before'];
-
-                            if (!is_array($middlewares)) {
-                                $middlewares = [$middlewares];
-                            }
-
-                            foreach ($middlewares as $class) {
-                                $route->before(
-                                    function (
-                                        Request $request,
-                                        Application $application
-                                    ) use ($class) {
-                                        $middleware = new $class($request, $application);
-                                        if (!$middleware instanceof StarterMiddleware) {
-                                            throw new WrongMiddlewareClassException($class);
-                                        }
-                                        return $middleware->call();
-                                    }
-                                );
-                            }
-                        }
-
-                        // After middlewares
-                        if (isset($definition['after'])) {
-                            $middlewares = $definition['after'];
-
-                            if (!is_array($middlewares)) {
-                                $middlewares = [$middlewares];
-                            }
-
-                            foreach ($middlewares as $class) {
-                                $route->after(
-                                    function (
-                                        Request $request,
-                                        JsonResponse $response,
-                                        Application $application
-                                    ) use ($class) {
-                                        $middleware = new $class($request, $application);
-                                        if (!$middleware instanceof StarterMiddleware) {
-                                            throw new WrongMiddlewareClassException($class);
-                                        }
-                                        return $middleware->call();
-                                    }
-                                );
-                            }
-                        }
+                        $this->loadMiddlewares($route, $definition, 'before');
+                        $this->loadMiddlewares($route, $definition, 'after');
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Load the middlewares of a route definition.
+     *
+     * @param $route Controller Controller object to affect the middleware.
+     * @param array $definition Route definition array.
+     * @param string $type Type of middleware ("after" or "before").
+     * @return void
+     */
+    protected function loadMiddlewares(Controller $route, array $definition, string $type = 'before'): void
+    {
+        if ($type !== 'before' && $type !== 'after') {
+            return;
+        }
+
+        if (isset($definition[$type])) {
+            $middlewares = $definition[$type];
+
+            if (!is_array($middlewares)) {
+                $middlewares = [$middlewares];
+            }
+
+            foreach ($middlewares as $class) {
+                $route->{$type}(
+                    function (
+                        Request $request,
+                        $arg1,
+                        $arg2 = null
+                    ) use (
+                        $type,
+                        $class
+                    ) {
+                        $application = $type === 'after' ? $arg2 : $arg1;
+
+                        $middleware = new $class($request, $application);
+                        if (!$middleware instanceof StarterMiddleware) {
+                            throw new WrongMiddlewareClassException($class);
+                        }
+                        return $middleware->call();
+                    }
+                );
+            }
+        }
+    }
+
+    /**
+     * Load Doctrine mapping configuration.
+     *
+     * Be default, the entities should be in the MyModule\Entity namespace located in the src/Entity directory of
+     * the module.
+     *
+     * @return void
+     */
+    protected function loadMapping(): void
+    {
+        $key = 'orm.em.options';
+        if ($this->application->offsetExists($key)) {
+            $options = $this->application->offsetGet($key);
+
+            $reflection = new \ReflectionClass($this);
+            $namespace = $reflection->getNamespaceName();
+
+            $options['mappings'][] = [
+                'type'      => 'annotation',
+                'namespace' => $namespace . '\Entity',
+                'path'      => $this->directory . '/src/Entity'
+            ];
+
+            $this->application->offsetSet($key, $options);
         }
     }
 
@@ -208,6 +233,7 @@ abstract class StarterModule
      *
      * Called in Console application.
      *
+     * @param Console $console The console application.
      * @return void
      */
     public function afterConsoleLoad(Console $console): void
