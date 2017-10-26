@@ -16,5 +16,5 @@ define('DIR_VENDORS', '../vendor');
 // Directory containing application modules
 define('DIR_MODULES', 'module');
 
-// Directory containing the gloabal configuration
+// Directory containing the global configuration
 define('DIR_CONFIG', 'config');

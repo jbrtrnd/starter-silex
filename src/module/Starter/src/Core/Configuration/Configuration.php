@@ -13,7 +13,7 @@ class Configuration implements \ArrayAccess
     /**
      * @var array Internal container.
      */
-    protected $container;
+    protected $container = [];
 
     /**
      * Whether a offset exists.

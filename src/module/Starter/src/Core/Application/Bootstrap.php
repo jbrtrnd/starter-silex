@@ -3,6 +3,7 @@
 namespace Starter\Core\Application;
 
 use Silex\Application;
+use Starter\Core\Configuration\ServiceProvider as ConfigurationServiceProvider;
 use Starter\Core\Module\Loader\ServiceProvider as ModuleLoaderServiceProvider;
 
 /**
@@ -27,6 +28,7 @@ class Bootstrap
     {
         $this->application = new Application();
 
+        $this->application->register(new ConfigurationServiceProvider());
         $this->application->register(new ModuleLoaderServiceProvider());
     }
 

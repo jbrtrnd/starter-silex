@@ -13,6 +13,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
 * [Overview](#overview)
     * [Base project structure](#base-project-structure)
     * [Console mode](#console-mode)
+    * [Project configuration](#project-configuration)
 * [Create your own module](#create-your-own-module)
     * [What is a Module ?](#what-is-a-module-)
     * [Module skeleton](#module-skeleton)
@@ -82,6 +83,8 @@ See [Running built-in PHP development server](#running-built-in-php-development-
     |-- console        --> PHP executable file to run the console mode
 |-- node_modules/      --> Javascript tools installed from NPM
 |-- src/               --> Sources files root directory
+    |-- config/        --> Application global configuration
+        |-- local/     --> Application local configuration
     |-- modules/       --> Modules root directory (write your own modules here !)
         |-- Starter    --> Starter internal module, do not delete this directory !
         |-- Example    --> An example of custom module
@@ -118,6 +121,30 @@ php bin/console <command>
 ```
 
 See [Console commands](#console-commands) to learn how to write your own commands.
+
+### Project configuration
+
+The starter allow you to define global configuration files. The configuration files are PHP files returning an array. They 
+should resides in the ``src/config`` directory and be suffixed by ``*.config.php``.
+
+The local configuration files (e.g. database connexion...) should be in the ``src/config/local`` directory as it's ignored
+by the Git repository. 
+
+The configuration will be loaded in the Silex container at the key ``starter.configuration`` as a ``Configuration`` 
+object.
+
+Example :
+```php
+<?php
+
+return [
+    'a-configuration-key' => 'some-value',
+    'another-configuration-key' => [
+        'foo', 'bar', 'baz'
+    ]
+];
+
+```
 
 ## Create your own module
 
