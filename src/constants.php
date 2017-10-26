@@ -18,3 +18,6 @@ define('DIR_MODULES', 'module');
 
 // Directory containing the global configuration
 define('DIR_CONFIG', 'config');
+
+// Directory containing application data
+define('DIR_DATA', 'data');

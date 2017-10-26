@@ -21,6 +21,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [The Module class](#the-module-class)
     * [Controllers and Routes](#controllers-and-routes)
     * [Middlewares](#middlewares)
+    * [Doctrine entities](#doctrine-entities)
     * [Console commands](#console-commands)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
@@ -87,7 +88,9 @@ See [Running built-in PHP development server](#running-built-in-php-development-
 |-- src/               --> Sources files root directory
     |-- config/        --> Application global configuration
         |-- local/     --> Application local configuration
-    |-- modules/       --> Modules root directory (write your own modules here !)
+    |-- data/          --> Application data directory
+        |-- proxies/   --> Used by Doctrine ORM to save entities proxies
+    |-- module/        --> Modules root directory (write your own modules here !)
         |-- Starter    --> Starter internal module, do not delete this directory !
         |-- Example    --> An example of custom module
     |-- public/        --> Root directory for webserver (should be the only web-accessible directory)
@@ -222,7 +225,7 @@ The very basic structure of a Module is as follows :
 
 ```
 |-- src/
-    |-- modules/
+    |-- module/
         |-- MyModule/                   --> Root directory
             |-- config/                 --> Configuration directory (containing your *.config.php files)
             |-- src/                    --> Sources directory (containing your *.php files)
@@ -475,6 +478,50 @@ class Module extends StarterModule
 ```
 
 Now, you can run your command by executing ``php bin/console mymodule:somecommand`` in a shell.
+
+### Doctrine entities
+
+To create new entities managed by Doctrine ORM, you'll have to create them in the ``Entity`` directory of your module ``src``.
+Logically, your entities parent namespace will be`(and must be) ``YourModuleName\Entity``.
+
+This starter use Doctrine annotations to configure entities members.
+
+For example, an entity called ``MyEntity`` of the ``MyModule`` module must be located at
+ ``src/modules/MyModule/src/Entity/MyEntity.php``.
+
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+/**
+ * @Entity
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity
+{
+    /**
+     * @var int
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    
+    public function setId(?int $id)
+    {
+        $this->id = $id;
+    }
+}
+    
+```
+
+Launch the command ``php bin/console orm:schema-tool:update -f`` to update your database schema.
 
 ## Automated Grunt tasks
 

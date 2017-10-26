@@ -18,6 +18,7 @@
   "require": {
     "silex/silex": "^2.2",
     "symfony/console": "^3.3",
-    "doctrine/dbal": "^2.6"
+    "doctrine/dbal": "^2.6",
+    "dflydev/doctrine-orm-service-provider": "^2.0"
   }
 }

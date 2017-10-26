@@ -117,7 +117,7 @@ class Service
         }
 
         uksort($this->modules, function (string $a, string $b) {
-            return ($a === 'Starter' ? 1 : ($b === 'Starter' ? -1 : 0));
+            return ($a === 'Starter' ? -1 : ($b === 'Starter' ? 1 : 0));
         });
     }
 }

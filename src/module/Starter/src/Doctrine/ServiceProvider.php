@@ -2,6 +2,7 @@
 
 namespace Starter\Doctrine;
 
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Provider\DoctrineServiceProvider;
@@ -29,6 +30,13 @@ class ServiceProvider implements ServiceProviderInterface
         if (isset($configuration['doctrine']['dbal'])) {
             $application->register(new DoctrineServiceProvider(), [
                 'dbs.options' => $configuration['doctrine']['dbal']
+            ]);
+
+            $application->register(new DoctrineOrmServiceProvider(), [
+                'orm.proxies_dir' => DIR_DATA . '/proxies',
+                'orm.em.options' => [
+                    'mappings' => []
+                ]
             ]);
         }
     }
