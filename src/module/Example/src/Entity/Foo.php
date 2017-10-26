@@ -2,6 +2,8 @@
 
 namespace Example\Entity;
 
+use Starter\Doctrine\Entity\Timestampable;
+
 /**
  * Class Foo.
  *
@@ -15,6 +17,8 @@ namespace Example\Entity;
  */
 class Foo
 {
+    use Timestampable;
+
     /**
      * @var int
      * @Id
@@ -42,7 +46,7 @@ class Foo
     /**
      * Set the id property value.
      *
-     * @param int $id Return the id property value.
+     * @param int $id The value to set.
      */
     public function setId(?int $id)
     {
@@ -62,7 +66,7 @@ class Foo
     /**
      * Set the bar property value.
      *
-     * @param string $bar Return the bar property value.
+     * @param string $bar The value to set.
      * @return void
      */
     public function setBar(?string $bar): void
