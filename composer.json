@@ -1,6 +1,7 @@
 {
   "name": "jbrtrnd/starter-silex",
   "description": "Project starter built on Silex and Doctrine",
+  "version": "1.0.0",
   "type": "project",
   "license": "ISC",
   "authors": [
