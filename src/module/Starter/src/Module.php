@@ -3,6 +3,7 @@
 namespace Starter;
 
 use Silex\Provider\ServiceControllerServiceProvider;
+use Starter\Core\Http\JsonBody\ServiceProvider as JsonBodyServiceProvider;
 use Starter\Core\Module\StarterModule;
 
 /**
@@ -27,5 +28,8 @@ class Module extends StarterModule
          * @see http://silex.sensiolabs.org/doc/2.0/providers/service_controller.html
          */
         $this->application->register(new ServiceControllerServiceProvider());
+
+        // Json Body request parser provider
+        $this->application->register(new JsonBodyServiceProvider());
     }
 }

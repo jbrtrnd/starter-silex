@@ -21,6 +21,12 @@ return [
                     AfterMiddleware::class
                 ]
             ]
+        ],
+        '/test_json' => [
+            'POST' => [
+                'controller' => 'test.controller.test',
+                'action'     => 'json'
+            ]
         ]
     ]
 ];

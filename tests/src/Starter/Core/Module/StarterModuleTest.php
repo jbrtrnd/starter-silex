@@ -2,11 +2,8 @@
 
 namespace Starter\Core\Module;
 
-use Starter\Core\Application\Console;
-use Starter\Core\Module\Loader\Service;
-use Test\BootstrapTestCase;
+use Test\TestModuleTestCase;
 use TestModule\Controller\TestController;
-use TestModule\Module;
 
 /**
  * Class StarterModuleTest
@@ -14,22 +11,8 @@ use TestModule\Module;
  * @package Starter\Core\Module
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
-class StarterModuleTest extends BootstrapTestCase
+class StarterModuleTest extends TestModuleTestCase
 {
-    public function createApplication()
-    {
-        $application = parent::createApplication();
-
-        $loader  = new Service($application);
-        $modules = $loader->getModules();
-        $modules['TestModule'] = new Module($application);
-        $loader->setModules($modules);
-
-        $loader->load();
-
-        return $application;
-    }
-
     /**
      * Test if the loader loads the module controllers.
      */
