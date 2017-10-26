@@ -117,6 +117,8 @@ To execute a specific command, run the following :
 php bin/console <command>
 ```
 
+See [Console commands](#console-commands) to learn how to write your own commands.
+
 ## Create your own module
 
 ### What is a Module ?
@@ -335,6 +337,61 @@ Return ``null`` if the request should continue to the next processing or return 
 request processing at the middleware.
 
 ### Console commands
+
+To write your own command, you'll have to do two steps :
+
+First, create the command class :
+```php
+<?php
+
+namespace MyModule\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class SomeCommand extends Command
+{
+    protected function configure(): void
+    {
+        $this->setName('mymodule:some-command')
+             ->setDescription('A custom command.');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): void
+    {
+        // Code
+    }
+}
+```
+
+The command must inherits the ``Symfony\Component\Console\Command\Command`` class, you'll have to write two functions,
+``configure`` (to define your command name and description) and ``execute`` (the code of you command). Take a look to the Symfony
+documentation to learn more about commands.
+
+Then, you'll have to tell the application to load your command. Commonly, this is done in the Module class of your custom
+module, in the ``afterConsoleLoad`` function.
+
+```php
+<?php
+    
+namespace MyModule;
+    
+use MyModule\Command\SomeCommand;
+use Starter\Core\Module\StarterModule;
+    
+class Module extends StarterModule
+{
+    public function afterConsoleLoad(Console $console): void
+    {
+        // Add your command to the application
+        $console->add(new SomeCommand());
+    }
+}
+    
+```
+
+Now, you can run your command by executing ``php bin/console mymodule:somecommand`` in a shell.
 
 ## Automated Grunt tasks
 

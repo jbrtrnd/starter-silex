@@ -16,6 +16,6 @@ class TestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-
+        // Some code
     }
 }

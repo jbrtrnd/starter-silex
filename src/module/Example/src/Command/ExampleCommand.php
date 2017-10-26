@@ -33,6 +33,6 @@ class ExampleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-
+        // Let's do something
     }
 }
