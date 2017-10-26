@@ -1,0 +1,22 @@
+{
+  "name": "jbrtrnd/starter-silex",
+  "description": "Project starter built on Silex and Doctrine",
+  "version": "1.0.0",
+  "type": "project",
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Jules Bertrand",
+      "email": "jules.brtrnd@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.1",
+    "phpunit/phpunit": "^6.4",
+    "symfony/browser-kit": "^3.3"
+  },
+  "require": {
+    "silex/silex": "^2.2",
+    "symfony/console": "^3.3"
+  }
+}

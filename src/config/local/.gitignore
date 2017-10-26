@@ -1,0 +1,3 @@
+*
+!.gitignore
+!local.config.tpl.php

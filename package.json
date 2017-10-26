@@ -1,0 +1,26 @@
+{
+  "name": "@jbrtrnd/starter-silex",
+  "version": "1.0.0",
+  "description": "Project starter built on Silex and Doctrine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbrtrnd/starter-silex.git"
+  },
+  "author": {
+    "name": "Jules Bertrand",
+    "email": "jules.brtrnd@gmail.com",
+    "url": "https://github.com/jbrtrnd/"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbrtrnd/starter-silex/issues"
+  },
+  "homepage": "https://github.com/jbrtrnd/starter-silex#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-php": "^1.5.1",
+    "grunt-phpcs": "^0.4.0",
+    "grunt-phpdocumentor": "https://github.com/jbrtrnd/grunt-phpdocumentor/archive/master.tar.gz",
+    "grunt-phpunit": "^0.3.6"
+  }
+}
