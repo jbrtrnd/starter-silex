@@ -17,6 +17,7 @@
   },
   "require": {
     "silex/silex": "^2.2",
-    "symfony/console": "^3.3"
+    "symfony/console": "^3.3",
+    "doctrine/dbal": "^2.6"
   }
 }

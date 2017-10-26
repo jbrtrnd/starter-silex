@@ -56,8 +56,12 @@ module.exports = function (grunt) {
     // Load the plugin that provides the "phpdocumentor" task.
     grunt.loadNpmTasks('grunt-phpdocumentor');
 
+    // Tasks
     grunt.registerTask('doc', ['phpdocumentor']);
     grunt.registerTask('style', ['phpcs']);
     grunt.registerTask('test', ['phpunit']);
     grunt.registerTask('run', ['php']);
+
+    // Aliases
+    grunt.registerTask('validate', ['style', 'test']);
 };

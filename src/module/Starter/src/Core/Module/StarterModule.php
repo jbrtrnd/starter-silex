@@ -208,6 +208,7 @@ abstract class StarterModule
      *
      * Called in Console application.
      *
+     * @param Console $console The console application.
      * @return void
      */
     public function afterConsoleLoad(Console $console): void

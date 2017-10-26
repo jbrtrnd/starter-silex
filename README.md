@@ -14,6 +14,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Base project structure](#base-project-structure)
     * [Console mode](#console-mode)
     * [Project configuration](#project-configuration)
+        * [Doctrine DBAL configuration](#doctrine-dbal-configuration)
 * [Create your own module](#create-your-own-module)
     * [What is a Module ?](#what-is-a-module-)
     * [Module skeleton](#module-skeleton)
@@ -26,6 +27,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Running tests](#running-tests)
     * [Generate API documentation](#generate-api-documentation)
     * [Running built-in PHP development server](#running-built-in-php-development-server)
+    * [Aliases](#aliases)
     
 
 ## Getting Started
@@ -145,6 +147,60 @@ return [
 ];
 
 ```
+
+#### Doctrine DBAL configuration
+
+Copy the ``config/local/doctrine.config.template.php`` file  for ``config/local/doctrine.config.php`` and replace values
+with yours.
+
+```php
+<?php
+
+
+return [
+    'doctrine' => [
+        'dbal' => [
+            'default' => [
+                'driver'   => 'pdo_mysql',
+                'host'     => 'localhost',
+                'dbname'   => 'my_database',
+                'user'     => 'my_user',
+                'password' => 'my_password',
+                'driverOptions' => [
+                    1002 => 'SET NAMES utf8'
+                ]
+            ],
+            'foo' => [
+                'driver'   => 'pdo_mysql',
+                'host'     => 'localhost',
+                'dbname'   => 'another_database',
+                'user'     => 'another_user',
+                'password' => 'another_password',
+                'driverOptions' => [
+                    1002 => 'SET NAMES utf8'
+                ]
+            ]
+        ]
+    ]
+];
+
+```
+
+You can set multiple connexions by adding entries in the ``doctrine.dbal`` key. They will be automatically injected in the
+Silex application.
+
+```php
+$application['db']->fetchAll('SELECT * FROM table');
+$application['dbs']['default']->fetchAll('SELECT * FROM table'); // Same as $application['db']
+$application['dbs']['foo']->fetchAll('SELECT * FROM table');
+```
+
+The first connexion will be the default connexion used with ``$application['db']``.
+See the Silex Doctrine [documentation](https://silex.symfony.com/doc/2.0/providers/doctrine.html).
+Internally, the configuration entry ``doctrine.dbal`` will be mapped to the ``dbs.options`` used by the
+Silex Doctrine provider.
+
+You should write PHP test to check if your connexion is established and accessible. 
 
 ## Create your own module
 
@@ -451,3 +507,11 @@ grunt run
 ```
 Run the application with the built-in PHP server on the port ``8000`` from the ``src/public`` directory.
 This will not replace a real webserver (eg. Apache, Nginx), so **it's not recommended to use it in production**.
+
+### Aliases
+
+```shell
+grunt validate
+```
+
+Runs ``style`` then ``test`` task.

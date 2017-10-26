@@ -5,6 +5,7 @@ namespace Starter;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Starter\Core\Http\JsonBody\ServiceProvider as JsonBodyServiceProvider;
 use Starter\Core\Module\StarterModule;
+use Starter\Doctrine\ServiceProvider as DoctrineServiceProvider;
 
 /**
  * Module class for the Starter module.
@@ -31,5 +32,8 @@ class Module extends StarterModule
 
         // Json Body request parser provider
         $this->application->register(new JsonBodyServiceProvider());
+
+        // Doctrine provider
+        $this->application->register(new DoctrineServiceProvider());
     }
 }
