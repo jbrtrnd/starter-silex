@@ -193,18 +193,21 @@ abstract class StarterModule
     {
         $key = 'orm.em.options';
         if ($this->application->offsetExists($key)) {
-            $options = $this->application->offsetGet($key);
+            $directory = $this->directory . '/src/Entity';
+            if (is_dir($directory)) {
+                $options = $this->application->offsetGet($key);
 
-            $reflection = new \ReflectionClass($this);
-            $namespace = $reflection->getNamespaceName();
+                $reflection = new \ReflectionClass($this);
+                $namespace = $reflection->getNamespaceName();
 
-            $options['mappings'][] = [
-                'type'      => 'annotation',
-                'namespace' => $namespace . '\Entity',
-                'path'      => $this->directory . '/src/Entity'
-            ];
+                $options['mappings'][] = [
+                    'type'      => 'annotation',
+                    'namespace' => $namespace . '\Entity',
+                    'path'      => $directory
+                ];
 
-            $this->application->offsetSet($key, $options);
+                $this->application->offsetSet($key, $options);
+            }
         }
     }
 

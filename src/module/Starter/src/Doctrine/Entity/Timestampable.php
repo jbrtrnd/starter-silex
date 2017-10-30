@@ -40,7 +40,7 @@ trait Timestampable
      * @param \DateTime $created The value to set.
      * @return void
      */
-    public function setCreated(?\DateTime $created)
+    public function setCreated(?\DateTime $created): void
     {
         $this->created = $created;
     }
@@ -61,7 +61,7 @@ trait Timestampable
      * @param \DateTime $updated The value to set.
      * @return void
      */
-    public function setUpdated(?\DateTime $updated)
+    public function setUpdated(?\DateTime $updated): void
     {
         $this->updated = $updated;
     }

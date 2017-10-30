@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
  * Class ConstantsTest
  *
  * @package Starter
- * @author Jules Bertrand <jules.brtrnd@gmail.com>
+ * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
 class ConstantsTest extends TestCase
 {
