@@ -140,9 +140,10 @@ abstract class StarterModule
     /**
      * Load the middlewares of a route definition.
      *
-     * @param Controller $route Controller object to affect the middleware.
-     * @param array $definition Route definition array.
-     * @param string $type Type of middleware ("after" or "before").
+     * @param Controller $route      Controller object to affect the middleware.
+     * @param array      $definition Route definition array.
+     * @param string     $type       Type of middleware ("after" or "before").
+     *
      * @return void
      */
     protected function loadMiddlewares(Controller $route, array $definition, string $type = 'before'): void
@@ -237,6 +238,7 @@ abstract class StarterModule
      * Called in Console application.
      *
      * @param Console $console The console application.
+     *
      * @return void
      */
     public function afterConsoleLoad(Console $console): void

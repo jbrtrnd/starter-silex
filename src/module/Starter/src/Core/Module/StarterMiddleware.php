@@ -29,7 +29,7 @@ abstract class StarterMiddleware
     /**
      * StarterMiddleware constructor.
      *
-     * @param Request $request The current HTTP request.
+     * @param Request     $request     The current HTTP request.
      * @param Application $application The silex application.
      */
     public function __construct(Request $request, Application $application)

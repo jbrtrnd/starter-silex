@@ -45,8 +45,10 @@ class Bar extends RestEntity
      * Set the id property value.
      *
      * @param int $id The value to set.
+     *
+     * @return void
      */
-    public function setId(?int $id)
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -65,6 +67,7 @@ class Bar extends RestEntity
      * Set the baz property value.
      *
      * @param string $baz The value to set.
+     *
      * @return void
      */
     public function setBaz(?string $baz): void

@@ -46,6 +46,7 @@ class Module extends StarterModule
      * Doctrine commands needs the "em" helper set.
      *
      * @param Console $console The console application.
+     *
      * @return void
      */
     public function afterConsoleLoad(Console $console): void

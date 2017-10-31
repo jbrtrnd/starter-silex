@@ -52,8 +52,10 @@ class RestController
     /**
      * RestController constructor.
      *
-     * @param string $entityClass The entity full-named classed to manage.
+     * @param string      $entityClass The entity full-named classed to manage.
      * @param Application $application The Silex container.
+     *
+     * @throws RepositorySearchFunctionNotFoundException If the repository don't contain the REST search function.
      */
     public function __construct(string $entityClass, Application $application)
     {
@@ -79,6 +81,7 @@ class RestController
      * By default, will call the "search" function of the repository.
      *
      * @param Request $request The current HTTP request.
+     *
      * @return JsonResponse
      */
     public function search(Request $request): JsonResponse
@@ -99,8 +102,9 @@ class RestController
      * - 404 : entity not found
      * - 500 : internal error
      *
-     * @param mixed $id The primary key value of the entity to retrieve.
+     * @param mixed   $id      The primary key value of the entity to retrieve.
      * @param Request $request The current HTTP request.
+     *
      * @return JsonResponse
      */
     public function get($id, Request $request): JsonResponse
@@ -131,6 +135,7 @@ class RestController
      * - 500 : internal error
      *
      * @param Request $request The current HTTP request.
+     *
      * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
@@ -169,8 +174,9 @@ class RestController
      * - 422 : fields validation failed
      * - 500 : internal error
      *
-     * @param mixed $id The primary key value of the entity to update.
+     * @param mixed   $id      The primary key value of the entity to update.
      * @param Request $request The current HTTP request.
+     *
      * @return JsonResponse
      */
     public function update($id, Request $request): JsonResponse
@@ -202,8 +208,9 @@ class RestController
      * - 404 : entity not found
      * - 500 : internal error
      *
-     * @param mixed $id The primary key value of the entity to remove.
+     * @param mixed   $id      The primary key value of the entity to remove.
      * @param Request $request The current HTTP request.
+     *
      * @return JsonResponse
      */
     public function remove($id, Request $request): JsonResponse
@@ -233,8 +240,9 @@ class RestController
     /**
      * Hydrate an object from array values.
      *
-     * @param mixed[] $data Values to set.
+     * @param mixed[]    $data   Values to set.
      * @param RestEntity $object Object to hydrate.
+     *
      * @return object|RestEntity
      */
     protected function hydrate(array $data, RestEntity $object): RestEntity
