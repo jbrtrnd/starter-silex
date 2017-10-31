@@ -55,6 +55,7 @@ class Module extends StarterModule
         ]));
 
         $console->addCommands([
+            new \Starter\Generator\Command\Module,
             new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand,
             new \Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand,
             new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand,
