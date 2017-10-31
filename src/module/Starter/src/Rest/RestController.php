@@ -78,7 +78,20 @@ class RestController
      * - 200 : it's ok, entities retrieved
      * - 500 : internal error
      *
-     * By default, will call the "search" function of the repository.
+     * By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
+     * - "page"
+     * index of the page
+     * alias for : "_p"
+     *
+     * - "per_page"
+     * number of rows per page
+     * alias for : "_pp"
+     *
+     * - "sort"
+     * sort columns, commas-separated  and prefixed by '-' for desc. order (eg : sort=-field1,field2)
+     * alias for : "_s"
+     *
+     * If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
      *
      * @param Request $request The current HTTP request.
      *
@@ -86,9 +99,55 @@ class RestController
      */
     public function search(Request $request): JsonResponse
     {
-        $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}();
+        $headers = [];
 
-        return new JsonResponse($rows);
+        // Pagination
+        $limit  = null;
+        $offset = null;
+
+        $page     = $request->get('page', $request->get('_p', false));
+        $per_page = $request->get('per_page', $request->get('_pp', false));
+
+        if ($page && $per_page) {
+            if ($page && $page <= 0) {
+                $page = 1;
+            }
+
+            if ($per_page && $per_page <= 0) {
+                $per_page = 25;
+            }
+
+            $limit = $per_page;
+            $offset = $per_page * ($page - 1);
+        }
+
+        // Sorting
+        $orderBy = null;
+
+        $sort = $request->get('sort', $request->get('_s', false));
+
+        if ($sort) {
+            foreach (explode(',', $sort) as $column) {
+                $order = 'ASC';
+                if (strrpos($column, '-') === 0) {
+                    $order = 'DESC';
+                    $column = substr($column, 1);
+                }
+                $orderBy[$column] = $order;
+            }
+        }
+
+
+        // Repository call
+        $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($orderBy, $limit, $offset);
+
+        // Total for pagination in "X-REST-TOTAL" header
+        if ($limit !== null && $offset !== null) {
+            $total = sizeOf($this->repository->search($orderBy));
+            $headers['X-REST-TOTAL'] = $total;
+        }
+
+        return new JsonResponse($rows, Response::HTTP_OK, $headers);
     }
 
     /**
@@ -200,7 +259,7 @@ class RestController
      * Method : DELETE
      *
      * HTTP Status code :
-     * - 200 : it's ok, entity removed
+     * - 204 : it's ok, entity removed
      * - 404 : entity not found
      * - 500 : internal error
      *
@@ -220,7 +279,7 @@ class RestController
         $this->entityManager->remove($row);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_OK);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

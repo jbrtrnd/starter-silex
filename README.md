@@ -228,7 +228,7 @@ The ``RestController`` is designed to receive GET, PUT, POST and DELETE http req
 with an HTTP status code representing the final state of your request. It will needs a link to the entity class of your 
 ``RestEntity``.
 
-A ``RestController`` correctly mapped to its routes will producs the following api :
+A ``RestController`` correctly mapped to its routes will produce the following api :
 
 * **Search in the complete list of entities**
 
@@ -241,7 +241,13 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     * ``500`` : internal error
     
     Return an array of serialized entities on success.
-
+    
+    By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
+    * ``page`` : index of the page (alias : ``_p``)
+    * ``per_page`` : number of rows per page (alias : ``_pp``)
+    * ``sort`` : sort columns, commas-separated  and prefixed by '-' for desc. order (eg : ``sort=-field1,field2``) (alias : ``_s``)
+    
+    If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
 
 * **Retrieve an entity by its primary key value**
     
@@ -315,7 +321,7 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     Should be mapped to the ``remove`` RestController action
     
     Response codes :
-    * ``200`` : it's ok, entity removed
+    * ``204`` : it's ok, entity removed
     * ``404`` : entity not found
     * ``500`` : internal error
 
