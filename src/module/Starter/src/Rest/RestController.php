@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Silex\Application;
 use Starter\Doctrine\Hydrator\Hydrator;
+use Starter\Rest\Exception\RepositorySearchFunctionNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,6 +60,10 @@ class RestController
         $this->entityManager = $application['orm.em'];
         $this->repository    = $this->entityManager->getRepository($entityClass);
         $this->hydrator      = new Hydrator($this->entityManager);
+
+        if (!method_exists($this->repository, self::REPOSITORY_SEARCH_FUNCTION)) {
+            throw new RepositorySearchFunctionNotFoundException(self::REPOSITORY_SEARCH_FUNCTION, $entityClass);
+        }
     }
 
     /**
