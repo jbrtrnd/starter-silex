@@ -148,8 +148,6 @@ class RestController
         $values = $request->request->all();
         $this->hydrate($values, $row);
 
-        $row->setCreated(new \DateTime());
-
         $this->entityManager->persist($row);
         $this->entityManager->flush();
 
@@ -189,8 +187,6 @@ class RestController
 
         $values = $request->request->all();
         $this->hydrate($values, $row);
-
-        $row->setUpdated(new \DateTime());
 
         $this->entityManager->flush();
 

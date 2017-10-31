@@ -7,6 +7,7 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Starter\Core\Http\JsonBody\ServiceProvider as JsonBodyServiceProvider;
 use Starter\Core\Module\StarterModule;
 use Starter\Doctrine\ServiceProvider as DoctrineServiceProvider;
+use Starter\Doctrine\Subscriber\TimestampableSubscriber;
 use Symfony\Component\Console\Application as Console;
 use Symfony\Component\Console\Helper\HelperSet;
 
@@ -38,6 +39,16 @@ class Module extends StarterModule
 
         // Doctrine provider
         $this->application->register(new DoctrineServiceProvider());
+    }
+
+    /**
+     * Register the Starter services in the Silex container.
+     *
+     * @return void
+     */
+    public function afterApplicationLoad(): void
+    {
+        $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
     }
 
     /**

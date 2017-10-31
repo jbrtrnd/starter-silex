@@ -19,5 +19,5 @@ abstract class RestEntity implements \JsonSerializable
      *
      * @return array The serialized entity.
      */
-    abstract function jsonSerialize(): array;
+    abstract public function jsonSerialize(): array;
 }
