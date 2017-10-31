@@ -239,6 +239,8 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     Response codes :
     * ``200`` : it's ok, entities retrieved
     * ``500`` : internal error
+    
+    Return an array of serialized entities on success.
 
 
 * **Retrieve an entity by its primary key value**
@@ -253,7 +255,8 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     * ``200`` : it's ok, entity retrieved
     * ``404`` : entity not found
     * ``500`` : internal error
-
+    
+    Return the retrieved serialized entity on success.
 
 * **Create an entity**
 
@@ -274,7 +277,9 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     * ``200`` : it's ok, entity created
     * ``422`` : fields validation failed
     * ``500`` : internal error
-
+    
+    Return the created serialized entity on success.
+   
 
 * **Update an entity by its primary key value**
 
@@ -298,7 +303,8 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     * ``404`` : entity not found
     * ``422`` : fields validation failed
     * ``500`` : internal error
-
+    
+    Return the updated serialized entity on success.
 
 * **Remove an entity by its primary key value**
 
@@ -313,7 +319,7 @@ A ``RestController`` correctly mapped to its routes will producs the following a
     * ``404`` : entity not found
     * ``500`` : internal error
 
-
+    Return an empty response.
 
 ## Create your own module
 
@@ -657,6 +663,14 @@ use Starter\Rest\RestEntity;
 class MyEntity extends RestEntity
 {
     ...
+    
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            ...
+        ];
+    }
 }
     
 ```
@@ -777,7 +791,42 @@ the base fields of your entity (relations will not work for the moment).
 
 ### Entity serializing
 
-TODO
+The REST tools uses JSON as http response format. When an entity is retrieved (from search, get, create or update functions),
+it will be render in the response.
+
+You'll have to write yourself the process to convert your entity in an json format. This is why the ``RestEntity`` class 
+implements the ``JsonSerializable`` interface. In your entity you must write the ``jsonSerialize`` function as follows :
+ 
+ 
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Starter\Rest\RestEntity;
+    
+/**
+ * @Entity(repositoryClass="Starter\Rest\RestRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+    
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'     => $this->getId(),  // A property
+            'foo'    => $this->getFoo(), // Another property
+            'now'    => microtime(),     // A random property auto-calculated
+            ...
+        ];
+    }
+}
+    
+```
+
+This function should return your serialized entity.
 
 ### Entity field validation
 

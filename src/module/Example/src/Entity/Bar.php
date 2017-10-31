@@ -74,4 +74,17 @@ class Bar extends RestEntity
     {
         $this->baz = $baz;
     }
+
+    /**
+     * Convert the current object into json array.
+     *
+     * @return array The serialized entity.
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'  => $this->getId(),
+            'baz' => $this->getBaz()
+        ];
+    }
 }

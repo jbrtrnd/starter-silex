@@ -10,7 +10,14 @@ use Starter\Doctrine\Entity\Timestampable;
  * @package Starter\Rest
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
-abstract class RestEntity
+abstract class RestEntity implements \JsonSerializable
 {
     use Timestampable;
+
+    /**
+     * Convert the current object into json array.
+     *
+     * @return array The serialized entity.
+     */
+    abstract function jsonSerialize(): array;
 }
