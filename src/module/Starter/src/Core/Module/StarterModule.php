@@ -140,7 +140,7 @@ abstract class StarterModule
     /**
      * Load the middlewares of a route definition.
      *
-     * @param $route Controller Controller object to affect the middleware.
+     * @param Controller $route Controller object to affect the middleware.
      * @param array $definition Route definition array.
      * @param string $type Type of middleware ("after" or "before").
      * @return void
