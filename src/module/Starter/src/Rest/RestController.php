@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Read the starter documentation to know how to write your own REST controller.
  *
  * TODO : Fields validation for create and update
- * TODO : Search params (query, pager ...)
+ * TODO : Search params (query ...)
  *
  * @package Starter\Rest
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
@@ -215,11 +215,19 @@ class RestController
     public function create(Request $request): JsonResponse
     {
         $className = $this->repository->getClassName();
-
         /** @var RestEntity $row */
         $row = new $className();
 
         $values = $request->request->all();
+
+        $inputFilter = $row->getInputFilter($this->entityManager);
+        $inputFilter->setData($values);
+        if ($inputFilter->isValid()) {
+            $values = $inputFilter->getValues();
+        } else {
+            return new JsonResponse($inputFilter->getMessages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $this->hydrate($values, $row);
 
         $this->entityManager->persist($row);
@@ -251,6 +259,8 @@ class RestController
      * embedded properties that are not included in the "jsonSerialize" function
      * alias for : "_e"
      *
+     * You can partially update the entity.
+     *
      * @param mixed   $id      The primary key value of the entity to update.
      * @param Request $request The current HTTP request.
      *
@@ -265,7 +275,16 @@ class RestController
         }
 
         $values = $request->request->all();
-        $this->hydrate($values, $row);
+
+        $inputFilter = $row->getInputFilter($this->entityManager);
+        $inputFilter->setData($this->merge($values, $row));
+        if ($inputFilter->isValid()) {
+            $values = $inputFilter->getValues();
+        } else {
+            return new JsonResponse($inputFilter->getMessages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $this->hydrate($values, $row, true);
 
         $this->entityManager->flush();
 
@@ -320,9 +339,27 @@ class RestController
      *
      * @return object|RestEntity
      */
-    protected function hydrate(array $data, RestEntity $object): RestEntity
+    protected function hydrate(array $data, RestEntity $object, bool $partial = false): RestEntity
     {
+        if ($partial) {
+            $this->merge($data, $object);
+        }
+
         return $this->hydrator->hydrate($data, $object);
+    }
+
+    /**
+     * Merge an array of values with the array representation of an object.
+     *
+     * @param array      $data   The array of values.
+     * @param RestEntity $object The object to convert.
+     *
+     * @return array
+     */
+    protected function merge(array $data, RestEntity $object): array
+    {
+        $values = array_merge($this->hydrator->extract($object), $data);
+        return $values;
     }
 
     /**

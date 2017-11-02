@@ -2,7 +2,10 @@
 
 namespace Example\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Starter\Rest\RestEntity;
+use Zend\InputFilter\Factory;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * Class Bar.
@@ -27,7 +30,7 @@ class Bar extends RestEntity
 
     /**
      * @var string A random property.
-     * @Column(type="string")
+     * @Column(type="string", nullable=false)
      */
     protected $baz;
 
@@ -104,5 +107,25 @@ class Bar extends RestEntity
             'id'  => $this->getId(),
             'baz' => $this->getBaz()
         ];
+    }
+
+    /**
+     * Return the Bar InputFilter for validating and filtering fields.
+     *
+     * @param EntityManager $entityManager The Doctrine entity manager.
+     *
+     * @return InputFilterInterface The InputFilter.
+     */
+    public function getInputFilter(EntityManager $entityManager): InputFilterInterface
+    {
+        $factory = new Factory();
+        return $factory->createInputFilter([
+            'id' => [
+                'required' => false
+            ],
+            'baz' => [
+                'required' => true
+            ]
+        ]);
     }
 }

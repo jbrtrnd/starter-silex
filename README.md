@@ -267,7 +267,6 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     Query parameters :
     * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
         
-    
     Return the retrieved serialized entity on success.
 
 * **Create an entity**
@@ -293,7 +292,7 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     Query parameters :
     * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
     
-    Return the created serialized entity on success.
+    Return the created serialized entity on success or the fields validation errors.
    
 
 * **Update an entity by its primary key value**
@@ -322,7 +321,9 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     Query parameters :
     * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
     
-    Return the updated serialized entity on success.
+    You can partially update the entity.
+    
+    Return the updated serialized entity on success or the fields validation errors.
 
 * **Remove an entity by its primary key value**
 
@@ -855,7 +856,50 @@ For example, if you query with ``?embed=field1``, your entity must include the p
 
 ### Entity field validation
 
-TODO
+This starter use ``Zend\InputFilter`` to validate and filter input fields when creating or updating an entity.
+
+Your entity class must implements the ``getInputFilter`` function that must return an instance of ``Zend\InputFilter\InputFilterInterface``.
+
+You should be aware of the following : when creating or updating an entity, only presents fields in the entity inputFilter will
+be retrieved to create/update the entity. If you send a field value and it's not present in the inputFilter, it will not 
+be used.  
+
+Please read the [Zend InputFilter documentation](https://docs.zendframework.com/zend-inputfilter/) to see the available options.
+
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Doctrine\ORM\EntityManager;
+use Starter\Rest\RestEntity;
+use Zend\InputFilter\Factory;
+use Zend\InputFilter\InputFilterInterface;
+    
+/**
+ * @Entity(repositoryClass="Starter\Rest\RestRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+    
+    public function getInputFilter(EntityManager $entityManager): InputFilterInterface
+    {
+        $factory = new Factory();
+        return $factory->createInputFilter([
+            'id' => [
+                'required' => false
+            ],
+            'foo' => [
+                'required' => true
+            ],
+            ...
+        ]);
+    }
+}
+    
+```
 
 ### Query relationships
 
