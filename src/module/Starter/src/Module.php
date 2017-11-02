@@ -48,7 +48,9 @@ class Module extends StarterModule
      */
     public function afterApplicationLoad(): void
     {
-        $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
+        if (isset($configuration['doctrine']['dbal'])) {
+            $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
+        }
     }
 
     /**
