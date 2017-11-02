@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Silex\Application;
 use Starter\Doctrine\Hydrator\Hydrator;
 use Starter\Rest\Exception\RepositorySearchFunctionNotFoundException;
+use Starter\Utils\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * TODO : Fields validation for create and update
  * TODO : Search params (query, pager ...)
- * TODO : Entity json serializing
  *
  * @package Starter\Rest
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
@@ -78,7 +78,7 @@ class RestController
      * - 200 : it's ok, entities retrieved
      * - 500 : internal error
      *
-     * By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
+     * Query parameters :
      * - "page"
      * index of the page
      * alias for : "_p"
@@ -91,6 +91,11 @@ class RestController
      * sort columns, commas-separated  and prefixed by '-' for desc. order (eg : sort=-field1,field2)
      * alias for : "_s"
      *
+     * - "embed"
+     * embedded properties that are not included in the "jsonSerialize" function
+     * alias for : "_e"
+     *
+     * By default, all entities will be retrieved, you can pass query parameters to limit or filter results
      * If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
      *
      * @param Request $request The current HTTP request.
@@ -117,7 +122,7 @@ class RestController
                 $per_page = 25;
             }
 
-            $limit = $per_page;
+            $limit  = $per_page;
             $offset = $per_page * ($page - 1);
         }
 
@@ -130,13 +135,12 @@ class RestController
             foreach (explode(',', $sort) as $column) {
                 $order = 'ASC';
                 if (strrpos($column, '-') === 0) {
-                    $order = 'DESC';
+                    $order  = 'DESC';
                     $column = substr($column, 1);
                 }
                 $orderBy[$column] = $order;
             }
         }
-
 
         // Repository call
         $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($orderBy, $limit, $offset);
@@ -147,7 +151,7 @@ class RestController
             $headers['X-REST-TOTAL'] = $total;
         }
 
-        return new JsonResponse($rows, Response::HTTP_OK, $headers);
+        return new JsonResponse($this->serializeAll($rows, $request), Response::HTTP_OK, $headers);
     }
 
     /**
@@ -161,6 +165,11 @@ class RestController
      * - 404 : entity not found
      * - 500 : internal error
      *
+     * Query parameters :
+     * - "embed"
+     * embedded properties that are not included in the "jsonSerialize" function
+     * alias for : "_e"
+     *
      * @param mixed   $id      The primary key value of the entity to retrieve.
      * @param Request $request The current HTTP request.
      *
@@ -168,12 +177,13 @@ class RestController
      */
     public function get($id, Request $request): JsonResponse
     {
+        /** @var RestEntity $row */
         $row = $this->repository->find($id);
         if (!$row) {
             return $this->notFoundResponse();
         }
 
-        return new JsonResponse($row);
+        return new JsonResponse($this->serialize($row, $request));
     }
 
     /**
@@ -193,6 +203,11 @@ class RestController
      * - 422 : fields validation failed
      * - 500 : internal error
      *
+     * Query parameters :
+     * - "embed"
+     * embedded properties that are not included in the "jsonSerialize" function
+     * alias for : "_e"
+     *
      * @param Request $request The current HTTP request.
      *
      * @return JsonResponse
@@ -210,7 +225,7 @@ class RestController
         $this->entityManager->persist($row);
         $this->entityManager->flush();
 
-        return new JsonResponse($row);
+        return new JsonResponse($this->serialize($row, $request));
     }
 
     /**
@@ -231,6 +246,11 @@ class RestController
      * - 422 : fields validation failed
      * - 500 : internal error
      *
+     * Query parameters :
+     * - "embed"
+     * embedded properties that are not included in the "jsonSerialize" function
+     * alias for : "_e"
+     *
      * @param mixed   $id      The primary key value of the entity to update.
      * @param Request $request The current HTTP request.
      *
@@ -249,7 +269,7 @@ class RestController
 
         $this->entityManager->flush();
 
-        return new JsonResponse($row);
+        return new JsonResponse($this->serialize($row, $request));
     }
 
     /**
@@ -303,5 +323,45 @@ class RestController
     protected function hydrate(array $data, RestEntity $object): RestEntity
     {
         return $this->hydrator->hydrate($data, $object);
+    }
+
+    /**
+     * Serialize a row.
+     *
+     * Retrieve the "embed" query parameter to embed non default properties.
+     *
+     * @param RestEntity $object  The row to serialize.
+     * @param Request    $request The request object to retrieve the "embed" query param..
+     *
+     * @return array
+     */
+    protected function serialize(RestEntity $object, Request $request): array
+    {
+        $res = $object->jsonSerialize();
+
+        $embed = $request->get('embed', $request->get('_e', false));
+        if ($embed) {
+            $embed        = explode(',', $embed);
+            $res['embed'] = Serializer::serialize($object, $embed);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Serialize an array of rows.
+     *
+     * @param array   $objects The rows to serialize.
+     * @param Request $request The request object to retrieve the "embed" query param.
+     *
+     * @return array
+     */
+    protected function serializeAll(array $objects, Request $request): array
+    {
+        $res = [];
+        foreach ($objects as $object) {
+            $res[] = $this->serialize($object, $request);
+        }
+        return $res;
     }
 }

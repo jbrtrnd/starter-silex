@@ -242,11 +242,13 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     
     Return an array of serialized entities on success.
     
-    By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
+    Query parameters :
     * ``page`` : index of the page (alias : ``_p``)
     * ``per_page`` : number of rows per page (alias : ``_pp``)
     * ``sort`` : sort columns, commas-separated  and prefixed by '-' for desc. order (eg : ``sort=-field1,field2``) (alias : ``_s``)
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
     
+    By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
     If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
 
 * **Retrieve an entity by its primary key value**
@@ -261,6 +263,10 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``200`` : it's ok, entity retrieved
     * ``404`` : entity not found
     * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+        
     
     Return the retrieved serialized entity on success.
 
@@ -283,6 +289,9 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``200`` : it's ok, entity created
     * ``422`` : fields validation failed
     * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
     
     Return the created serialized entity on success.
    
@@ -309,6 +318,9 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``404`` : entity not found
     * ``422`` : fields validation failed
     * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
     
     Return the updated serialized entity on success.
 
@@ -832,7 +844,14 @@ class MyEntity extends RestEntity
     
 ```
 
-This function should return your serialized entity.
+This function should return your serialized entity. By default, the ``RestController`` will use this function to serialize
+your row(s) on each request.
+
+Obviously, sometimes you'll need to retrieve some other data from your entities after an HTTP request. 
+To achieve this goal, use the ``embed`` query parameter. The ``embed`` parameter us your entity getters, if you pass 
+some property within this parameter, your entuty should include the corresponding ``getter`` function.
+
+For example, if you query with ``?embed=field1``, your entity must include the public function ``getField1()``.
 
 ### Entity field validation
 

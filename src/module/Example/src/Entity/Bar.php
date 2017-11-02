@@ -76,6 +76,24 @@ class Bar extends RestEntity
     }
 
     /**
+     * We can retrieve this data from the "embed" query parameter.
+     *
+     * @return array
+     */
+    public function getSomeRelation(): array
+    {
+        $a = new Bar();
+        $a->setBaz('test1');
+        $b = new Bar();
+        $b->setBaz('test1');
+
+        return [
+            $a,
+            $b
+        ];
+    }
+
+    /**
      * Convert the current object into json array.
      *
      * @return array The serialized entity.
