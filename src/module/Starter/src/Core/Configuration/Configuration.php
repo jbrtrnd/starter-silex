@@ -19,6 +19,7 @@ class Configuration implements \ArrayAccess
      * Whether a offset exists.
      *
      * @param mixed $offset An offset to check for.
+     *
      * @return bool True on success or false on failure.
      */
     public function offsetExists($offset): bool
@@ -30,6 +31,7 @@ class Configuration implements \ArrayAccess
      * Offset to retrieve.
      *
      * @param mixed $offset Offset to retrieve.
+     *
      * @return mixed Can return all value types.
      */
     public function offsetGet($offset)
@@ -41,7 +43,8 @@ class Configuration implements \ArrayAccess
      * Offset to set.
      *
      * @param mixed $offset The offset to assign the value to.
-     * @param mixed $value The value to set.
+     * @param mixed $value  The value to set.
+     *
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -57,6 +60,7 @@ class Configuration implements \ArrayAccess
      * Offset to unset.
      *
      * @param mixed $offset The offset to unset.
+     *
      * @return void
      */
     public function offsetUnset($offset): void
@@ -78,6 +82,7 @@ class Configuration implements \ArrayAccess
      * Merge the current Configuration with another.
      *
      * @param Configuration $configuration The Configuration to merge with.
+     *
      * @return void
      */
     public function merge(Configuration $configuration): void

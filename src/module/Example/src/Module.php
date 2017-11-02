@@ -35,7 +35,7 @@ class Module extends StarterModule
     public function afterApplicationLoad(): void
     {
         /**
-         * $app['swiftmailer.options'] = array(
+         * $this->application['swiftmailer.options'] = array(
          *     'host' => 'host',
          *     'port' => '25',
          *     'username' => 'username',

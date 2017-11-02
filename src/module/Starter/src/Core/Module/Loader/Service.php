@@ -85,7 +85,8 @@ class Service
     /**
      * Set the modules.
      *
-     * @param StarterModule[] $modules
+     * @param StarterModule[] $modules The modules to set.
+     *
      * @return void
      */
     public function setModules(array $modules): void
@@ -99,8 +100,9 @@ class Service
      * The modules are set in the $modules property with their name as key and the Module class instance as value.
      * The Starter Module will always be first because it must be loaded first.
      *
-     * @return void
      * @throws ModuleClassNotFoundException If the Module class doesn't exist in the module src directory.
+     *
+     * @return void
      */
     protected function retrieveModules(): void
     {

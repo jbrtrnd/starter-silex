@@ -2,6 +2,7 @@
 
 namespace Starter\Core\Module;
 
+use Doctrine\ORM\EntityManager;
 use Test\TestModuleTestCase;
 use TestModule\Controller\TestController;
 
@@ -59,5 +60,21 @@ class StarterModuleTest extends TestModuleTestCase
         $client  = $this->createClient();
         $client->request('OPTIONS', '/test_module_loaded');
         $this->assertTrue($client->getResponse()->isOk());
+    }
+
+    /**
+     * Test if the loader loads the module entities in the Doctrine Entity manager.
+     */
+    public function testTestModuleEntityMapping()
+    {
+        $configuration = $this->app['starter.configuration'];
+        if (isset($configuration['doctrine']['dbal'])) {
+            $mappings = $this->app['orm.em.options']['mappings'];
+            $this->assertContains([
+                'type'      => 'annotation',
+                'namespace' => 'TestModule\Entity',
+                'path'      => __DIR__ . DIRECTORY_SEPARATOR . 'TestModule/src/Entity'
+            ], $mappings);
+        }
     }
 }

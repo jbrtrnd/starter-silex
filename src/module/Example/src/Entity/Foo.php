@@ -47,8 +47,10 @@ class Foo
      * Set the id property value.
      *
      * @param int $id The value to set.
+     *
+     * @return void
      */
-    public function setId(?int $id)
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -67,6 +69,7 @@ class Foo
      * Set the bar property value.
      *
      * @param string $bar The value to set.
+     *
      * @return void
      */
     public function setBar(?string $bar): void

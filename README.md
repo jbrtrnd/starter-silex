@@ -15,6 +15,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Console mode](#console-mode)
     * [Project configuration](#project-configuration)
         * [Doctrine DBAL configuration](#doctrine-dbal-configuration)
+    * [REST architecture](#rest-architecture)
 * [Create your own module](#create-your-own-module)
     * [What is a Module ?](#what-is-a-module-)
     * [Module skeleton](#module-skeleton)
@@ -23,6 +24,10 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Middlewares](#middlewares)
     * [Doctrine entities](#doctrine-entities)
     * [Console commands](#console-commands)
+* [Create your own REST api](#create-your-own-rest-api)
+    * [Entity serializing](#entity-serializing)
+    * [Entity field validation](#entity-field-validation)
+    * [Query relationships](#query-relationships)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -204,6 +209,139 @@ Internally, the configuration entry ``doctrine.dbal`` will be mapped to the ``db
 Silex Doctrine provider.
 
 You should write PHP test to check if your connexion is established and accessible. 
+
+### REST architecture
+
+This starter provide some classes allowing you to create a rapid JSON REST api. The REST architecture that you'll be able
+to build is strongly linked to Doctrine ORM.
+
+See [Create your own REST api](#create-your-own-rest-api) section to create your own REST api but read this chapter first.
+
+When creating an entity, a controller and some routes linked to this controller functions, you can inherit some Starter 
+classes that will allow you to simply build a REST api for this entity :
+
+* ``Starter\Rest\RestEntity``
+* ``Starter\Rest\RestController``
+* ``Starter\Rest\RestRepository``
+
+The ``RestController`` is designed to receive GET, PUT, POST and DELETE http requests and will send back to you some JSON response
+with an HTTP status code representing the final state of your request. It will needs a link to the entity class of your 
+``RestEntity``.
+
+A ``RestController`` correctly mapped to its routes will produce the following api :
+
+* **Search in the complete list of entities**
+
+    ``GET : https://my.url.ext/some/route``
+    
+    Should be mapped to the ``search`` RestController action
+    
+    Response codes :
+    * ``200`` : it's ok, entities retrieved
+    * ``500`` : internal error
+    
+    Return an array of serialized entities on success.
+    
+    Query parameters :
+    * ``page`` : index of the page (alias : ``_p``)
+    * ``per_page`` : number of rows per page (alias : ``_pp``)
+    * ``sort`` : sort columns, commas-separated  and prefixed by '-' for desc. order (eg : ``sort=-field1,field2``) (alias : ``_s``)
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+    * ``mode`` : perform a "and" or "or" query (default to "and") (alias : ``_m``)
+    * ``<property-name>`` : filter by any entity property (operator will be equal by default) (eg: ``field1=value``)
+    * ``<property-name>-<operator>`` : filter by any entity property and set the operator to apply, see Doctrine expr operators
+    
+    By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
+    If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
+
+* **Retrieve an entity by its primary key value**
+    
+    ``GET : https://my.url.ext/some/route/:id``
+
+    The ``:id`` route param must be always set.
+    
+    Should be mapped to the ``get`` RestController action.
+    
+    Response codes :
+    * ``200`` : it's ok, entity retrieved
+    * ``404`` : entity not found
+    * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+        
+    Return the retrieved serialized entity on success.
+
+* **Create an entity**
+
+    ``POST : https://my.url.ext/some/route``
+
+    Request body with ``Content-type : application/json`` header:
+    ``` 
+    {
+        "field_1": <FIELD1_VALUE>,
+        "field_2": <FIELD2_VALUE>,
+        ...
+    }
+    ```
+
+    Should be mapped to the ``create`` RestController action
+    
+    Response codes :
+    * ``200`` : it's ok, entity created
+    * ``422`` : fields validation failed
+    * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+    
+    Return the created serialized entity on success or the fields validation errors.
+   
+
+* **Update an entity by its primary key value**
+
+    ``PUT : https://my.url.ext/some/route/:id``
+    
+    Request body with ``Content-type : application/json`` header:
+    ``` 
+    {
+        "field_1": <FIELD1_VALUE>,
+        "field_2": <FIELD2_VALUE>,
+        ...
+    }
+    ```
+    
+    The ``:id`` route param must be always set.
+
+    Should be mapped to the ``update`` RestController action
+    
+    Response codes :
+    * ``200`` : it's ok, entity updated
+    * ``404`` : entity not found
+    * ``422`` : fields validation failed
+    * ``500`` : internal error
+    
+    Query parameters :
+    * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+    
+    You can partially update the entity.
+    
+    Return the updated serialized entity on success or the fields validation errors.
+
+* **Remove an entity by its primary key value**
+
+    ``DELETE : https://my.url.ext/some/route/:id``
+    
+    The ``:id`` route param must be always set.
+
+    Should be mapped to the ``remove`` RestController action
+    
+    Response codes :
+    * ``204`` : it's ok, entity removed
+    * ``404`` : entity not found
+    * ``500`` : internal error
+
+    Return an empty response.
 
 ## Create your own module
 
@@ -522,6 +660,292 @@ class MyEntity
 ```
 
 Launch the command ``php bin/console orm:schema-tool:update -f`` to update your database schema.
+
+## Create your own REST api
+
+Before going further, please be sure to fully understand the previous chapters [Create your own module](#create-your-own-module)
+and [REST architecture](#rest-architecture).
+
+To create your own REST api you'll have to user classes in the ``Starter\Rest`` namespace.
+
+First, set up the entity by make it inherits the ``RestEntity`` class and set its default repository to the 
+``RestRepository`` class :
+
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Starter\Rest\RestEntity;
+    
+/**
+ * @Entity(repositoryClass="Starter\Rest\RestRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+    
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            ...
+        ];
+    }
+}
+    
+```
+
+The ``repositoryClass="Starter\Rest\RestRepository"`` means that Doctrine will use the ``RestRepository`` as default 
+repository class. If need some special treatment (joins, params processing...) you can extends this class to write you 
+own repository and specify it in your entity (we'll see later how to custom your repository with the REST tools) :
+
+```php
+<?php
+    
+namespace MyModule\Repository;
+    
+use Starter\Rest\RestRepository;
+    
+class MyEntityRepository extends RestRepository
+{
+    ...
+}
+    
+```
+
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Starter\Rest\RestEntity;
+    
+/**
+ * @Entity(repositoryClass="MyModule\Repository\MyEntityRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+}
+    
+```
+
+Now let's define a REST controller for this entity :
+
+```php
+<?php
+    
+namespace MyModule\Controller;
+    
+use Silex\Application;
+use Starter\Rest\RestController;
+    
+class MyEntityController extends RestController
+{
+    public function __construct(Application $application)
+    {
+        parent::__construct('MyModule\Entity\MyEntity', $application);
+    }
+}
+    
+```
+
+You only have to inherits the ``RestController`` class, and pass the entity full class name inside the parent constructor.
+
+You can obviously overwrite the ``RestController`` parents functions if you need some special treatments.
+
+The last step is to create the associated routes with the correct HTTP methods :
+
+```php
+<?php
+    
+namespace MyModule;
+    
+use MyModule\Middleware\MyMiddleware;
+use MyModule\Middleware\MySecondMiddleware;
+use MyModule\Middleware\MyThirdMiddleware;
+use Silex\Application;
+    
+return [
+    'controllers' => [
+        ...
+        'myModule.controller.myEntity' => function (Application $application) {
+            return new Controller\MyEntityController($application);
+        },
+    ],
+    'routes' => [
+        ...
+        '/myEntity' => [
+            'GET' => [
+                'controller' => 'myModule.controller.myEntity',
+                'action'     => 'search'
+            ],
+            'POST' => [
+                'controller' => 'myModule.controller.myEntity',
+                'action'     => 'create'
+            ],
+        ],
+        '/myEntity/{id}' => [
+            'GET' => [
+                'controller' => 'myModule.controller.myEntity',
+                'action'     => 'get'
+            ],
+            'PUT' => [
+                'controller' => 'myModule.controller.myEntity',
+                'action'     => 'update'
+            ],
+            'DELETE' => [
+                'controller' => 'myModule.controller.myEntity',
+                'action'     => 'delete'
+            ],
+        ],
+        ...
+    ]
+];
+    
+```
+
+From now, you have a full running REST api for you custom entity. But be careful, you can only query (via the ``search`` action)
+the base fields of your entity (relations will not work for the moment).
+
+### Entity serializing
+
+The REST tools uses JSON as http response format. When an entity is retrieved (from search, get, create or update functions),
+it will be render in the response.
+
+You'll have to write yourself the process to convert your entity in an json format. This is why the ``RestEntity`` class 
+implements the ``JsonSerializable`` interface. In your entity you must write the ``jsonSerialize`` function as follows :
+ 
+ 
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Starter\Rest\RestEntity;
+    
+/**
+ * @Entity(repositoryClass="Starter\Rest\RestRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+    
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'     => $this->getId(),  // A property
+            'foo'    => $this->getFoo(), // Another property
+            'now'    => microtime(),     // A random property auto-calculated
+            ...
+        ];
+    }
+}
+    
+```
+
+This function should return your serialized entity. By default, the ``RestController`` will use this function to serialize
+your row(s) on each request.
+
+Obviously, sometimes you'll need to retrieve some other data from your entities after an HTTP request. 
+To achieve this goal, use the ``embed`` query parameter. The ``embed`` parameter us your entity getters, if you pass 
+some property within this parameter, your entuty should include the corresponding ``getter`` function.
+
+For example, if you query with ``?embed=field1``, your entity must include the public function ``getField1()``.
+
+### Entity field validation
+
+This starter use ``Zend\InputFilter`` to validate and filter input fields when creating or updating an entity.
+
+Your entity class must implements the ``getInputFilter`` function that must return an instance of ``Zend\InputFilter\InputFilterInterface``.
+
+You should be aware of the following : when creating or updating an entity, only presents fields in the entity inputFilter will
+be retrieved to create/update the entity. If you send a field value and it's not present in the inputFilter, it will not 
+be used.  
+
+Please read the [Zend InputFilter documentation](https://docs.zendframework.com/zend-inputfilter/) to see the available options.
+
+```php
+<?php
+    
+namespace MyModule\Entity;
+    
+use Doctrine\ORM\EntityManager;
+use Starter\Rest\RestEntity;
+use Zend\InputFilter\Factory;
+use Zend\InputFilter\InputFilterInterface;
+    
+/**
+ * @Entity(repositoryClass="Starter\Rest\RestRepository")
+ * @Table(name="mymodule_myentity")
+ */
+class MyEntity extends RestEntity
+{
+    ...
+    
+    public function getInputFilter(EntityManager $entityManager): InputFilterInterface
+    {
+        $factory = new Factory();
+        return $factory->createInputFilter([
+            'id' => [
+                'required' => false
+            ],
+            'foo' => [
+                'required' => true
+            ],
+            ...
+        ]);
+    }
+}
+    
+```
+
+### Query relationships
+
+If your entity has some relationship (Many-to-Many, One-to-Many...) and you want to perform some search queries based on
+theses relationships, you'll have to do some joins somewhere !
+
+The ``RestRepository`` use its internal ``search`` function to build and execute a Doctrine ``QueryBuilder`` from params
+retrieved via the ``RestController``.
+
+Extending the ``RestRepository`` for your custom entity allows you to override two functions :
+* ``beforeSearchCriteria(QueryBuilder $queryBuilder, ?array &$criteria): void``
+
+Allows you to modify the criteria that will be used by the QueryBuilder.
+
+* ``beforeSearchExecute(QueryBuilder $queryBuilder): void``
+
+Allows you to modify the QueryBuilder just before it's execution (when completely configured).
+
+Most of the time, you'll have to modify the QueryBuilder to add some joins to your query :
+
+```php
+<?php
+    
+namespace MyModule\Repository;
+    
+use Doctrine\ORM\QueryBuilder;
+use Starter\Rest\RestRepository;
+    
+class MyEntityRepository extends RestRepository
+{
+    protected function beforeSearchCriteria(QueryBuilder $queryBuilder, ?array &$criteria): void
+    {
+        $queryBuilder->join('o.relation', 'relation');
+        $queryBuilder->leftJoin('o.relation2', 'relation2');
+        $queryBuilder->join('relation2.subRelation', 'subRelation');
+    }
+}
+    
+```
+
+From now you can make an HTTP ``GET`` request to search your entities and query them by their relations.
+
+First level relationships should be prefixed by ``o.``.
 
 ## Automated Grunt tasks
 
