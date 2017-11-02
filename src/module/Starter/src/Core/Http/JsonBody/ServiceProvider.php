@@ -20,6 +20,7 @@ class ServiceProvider implements ServiceProviderInterface
      * Affect to the Silex container a global before middleware to parse json request.
      *
      * @param Container $application The Silex container.
+     *
      * @return void
      */
     public function register(Container $application): void

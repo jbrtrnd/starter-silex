@@ -7,6 +7,7 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Starter\Core\Http\JsonBody\ServiceProvider as JsonBodyServiceProvider;
 use Starter\Core\Module\StarterModule;
 use Starter\Doctrine\ServiceProvider as DoctrineServiceProvider;
+use Starter\Doctrine\Subscriber\TimestampableSubscriber;
 use Symfony\Component\Console\Application as Console;
 use Symfony\Component\Console\Helper\HelperSet;
 
@@ -41,38 +42,57 @@ class Module extends StarterModule
     }
 
     /**
+     * Register the Starter services in the Silex container.
+     *
+     * @return void
+     */
+    public function afterApplicationLoad(): void
+    {
+        if (isset($configuration['doctrine']['dbal'])) {
+            $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
+        }
+    }
+
+    /**
      * Add Starter commands.
      *
      * Doctrine commands needs the "em" helper set.
      *
      * @param Console $console The console application.
+     *
      * @return void
      */
     public function afterConsoleLoad(Console $console): void
     {
-        $console->setHelperSet(new HelperSet([
-            'em' => new EntityManagerHelper($this->application['orm.em'])
-        ]));
+        $configuration = $this->application['starter.configuration'];
 
-        $console->addCommands([
-            new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand,
-            new \Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand,
-            new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand,
-            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand,
-            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand,
-            new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand,
-            new \Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand,
-            new \Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand,
-            new \Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand,
-            new \Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand,
-            new \Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand,
-            new \Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand,
-            new \Doctrine\ORM\Tools\Console\Command\InfoCommand,
-            new \Doctrine\ORM\Tools\Console\Command\RunDqlCommand,
-            new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand,
-            new \Doctrine\DBAL\Tools\Console\Command\ImportCommand,
-            new \Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand,
-            new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand
-        ]);
+        if (isset($configuration['doctrine']['dbal'])) {
+            $console->setHelperSet(new HelperSet([
+                'em' => new EntityManagerHelper($this->application['orm.em'])
+            ]));
+            
+            $console->addCommands([
+                new \Starter\Generator\Command\Module,
+                new \Starter\Generator\Command\Entity,
+                new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand,
+                new \Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand,
+                new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand,
+                new \Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand,
+                new \Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand,
+                new \Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand,
+                new \Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand,
+                new \Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand,
+                new \Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand,
+                new \Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand,
+                new \Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand,
+                new \Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand,
+                new \Doctrine\ORM\Tools\Console\Command\InfoCommand,
+                new \Doctrine\ORM\Tools\Console\Command\RunDqlCommand,
+                new \Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand,
+                new \Doctrine\DBAL\Tools\Console\Command\ImportCommand,
+                new \Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand,
+                new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand
+            ]);
+        }
     }
 }

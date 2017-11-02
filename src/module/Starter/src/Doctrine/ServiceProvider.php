@@ -21,6 +21,7 @@ class ServiceProvider implements ServiceProviderInterface
      * Loads Doctrine DBAL and ORM in the Silex application.
      *
      * @param Container $application The Silex container.
+     *
      * @return void
      */
     public function register(Container $application): void

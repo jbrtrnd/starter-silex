@@ -21,6 +21,7 @@ class ServiceProvider implements ServiceProviderInterface
      * The module loader will be available at the "starter.module.loader" key.
      *
      * @param Container $application The Silex container.
+     *
      * @return void
      */
     public function register(Container $application): void

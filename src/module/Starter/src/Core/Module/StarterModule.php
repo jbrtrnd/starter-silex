@@ -140,9 +140,10 @@ abstract class StarterModule
     /**
      * Load the middlewares of a route definition.
      *
-     * @param $route Controller Controller object to affect the middleware.
-     * @param array $definition Route definition array.
-     * @param string $type Type of middleware ("after" or "before").
+     * @param Controller $route      Controller object to affect the middleware.
+     * @param array      $definition Route definition array.
+     * @param string     $type       Type of middleware ("after" or "before").
+     *
      * @return void
      */
     protected function loadMiddlewares(Controller $route, array $definition, string $type = 'before'): void
@@ -193,18 +194,21 @@ abstract class StarterModule
     {
         $key = 'orm.em.options';
         if ($this->application->offsetExists($key)) {
-            $options = $this->application->offsetGet($key);
+            $directory = $this->directory . '/src/Entity';
+            if (is_dir($directory)) {
+                $options = $this->application->offsetGet($key);
 
-            $reflection = new \ReflectionClass($this);
-            $namespace = $reflection->getNamespaceName();
+                $reflection = new \ReflectionClass($this);
+                $namespace = $reflection->getNamespaceName();
 
-            $options['mappings'][] = [
-                'type'      => 'annotation',
-                'namespace' => $namespace . '\Entity',
-                'path'      => $this->directory . '/src/Entity'
-            ];
+                $options['mappings'][] = [
+                    'type'      => 'annotation',
+                    'namespace' => $namespace . '\Entity',
+                    'path'      => $directory
+                ];
 
-            $this->application->offsetSet($key, $options);
+                $this->application->offsetSet($key, $options);
+            }
         }
     }
 
@@ -234,6 +238,7 @@ abstract class StarterModule
      * Called in Console application.
      *
      * @param Console $console The console application.
+     *
      * @return void
      */
     public function afterConsoleLoad(Console $console): void

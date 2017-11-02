@@ -21,6 +21,7 @@ class ServiceProvider implements ServiceProviderInterface
      * The global configuration will be available at the "starter.configuration" key.
      *
      * @param Container $application The Silex container.
+     *
      * @return void
      */
     public function register(Container $application): void

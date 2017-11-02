@@ -16,6 +16,7 @@ class Factory
      * Create a Configuration object from a PHP array
      *
      * @param array $container The PHP array to parse.
+     *
      * @return Configuration The Configuration object created.
      */
     public static function fromArray(array $container): Configuration
@@ -35,6 +36,7 @@ class Factory
      * The PHP file must return a PHP array.
      *
      * @param string $path The full path to the PHP file to parse.
+     *
      * @return Configuration The Configuration object created.
      */
     public static function fromFile(string $path): Configuration
@@ -55,6 +57,7 @@ class Factory
      * The PHP files must return a PHP array and they must be named as follows "<myfile>.config.php".
      *
      * @param string $path The full path to the directory.
+     *
      * @return Configuration The Configuration object created.
      */
     public static function fromDirectory(string $path): Configuration
