@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  * as repositoryClass an instance (or a child) of RestRepository.
  * Read the starter documentation to know how to write your own REST controller.
  *
- * TODO : Fields validation for create and update
  * TODO : Search params (query ...)
  *
  * @package Starter\Rest
