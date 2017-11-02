@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  * as repositoryClass an instance (or a child) of RestRepository.
  * Read the starter documentation to know how to write your own REST controller.
  *
- * TODO : Search params (query ...)
- *
  * @package Starter\Rest
  * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
@@ -94,6 +92,17 @@ class RestController
      * embedded properties that are not included in the "jsonSerialize" function
      * alias for : "_e"
      *
+     * - "mode"
+     * perform a "and" or "or" query (default to "and")
+     * alias for : "_m"
+     *
+     * - "<property-name>"
+     * filter by any entity property (operator will be equal by default) (ex: field1=value)
+     *
+     * - "<property-name>-<operator>"
+     * filter by any entity property and set the operator to apply
+     * see doctrine expr operators
+     *
      * By default, all entities will be retrieved, you can pass query parameters to limit or filter results
      * If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
      *
@@ -141,8 +150,29 @@ class RestController
             }
         }
 
+        // Filtering
+        $criteria = [];
+
+        $params = $request->query->all();
+        foreach ($params as $column => $value) {
+            if (!in_array($column, ['sort', '_s', 'page', '_p', 'per_page', '_pp', 'mode', '_m', 'embed', '_e'])) {
+                @list($property, $operator) = explode('-', $column);
+                $criteria[] = [
+                    'property' => $property,
+                    'operator' => $operator ?? 'eq',
+                    'value'    => $value
+                ];
+            }
+        }
+
+        // Mode
+        $mode = $request->get('mode', $request->get('_m', 'and'));
+        if (!in_array($mode, ['and', 'or'])) {
+            $mode = 'and';
+        }
+
         // Repository call
-        $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($orderBy, $limit, $offset);
+        $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($criteria, $orderBy, $mode, $limit, $offset);
 
         // Total for pagination in "X-REST-TOTAL" header
         if ($limit !== null && $offset !== null) {

@@ -247,6 +247,9 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``per_page`` : number of rows per page (alias : ``_pp``)
     * ``sort`` : sort columns, commas-separated  and prefixed by '-' for desc. order (eg : ``sort=-field1,field2``) (alias : ``_s``)
     * ``embed`` : embed properties not included in the default ``jsonSerialize`` entity function (eg : ``embed=field1,relation.field2``) (alias : ``_e``)
+    * ``mode`` : perform a "and" or "or" query (default to "and") (alias : ``_m``)
+    * ``<property-name>`` : filter by any entity property (operator will be equal by default) (eg: ``field1=value``)
+    * ``<property-name>-<operator>`` : filter by any entity property and set the operator to apply, see Doctrine expr operators
     
     By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
     If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
