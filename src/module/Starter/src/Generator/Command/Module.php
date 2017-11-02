@@ -22,9 +22,9 @@ class Module extends Command
      */
     protected function configure(): void
     {
-        $this->setName('generate:module')
+        $this->setName('starter:generate:module')
              ->setDescription('Generate a module')
-             ->addArgument('name', InputArgument::REQUIRED, 'The name of the module.');
+             ->addArgument('module', InputArgument::REQUIRED, 'The name of the module.');
     }
 
     /**
@@ -33,60 +33,16 @@ class Module extends Command
      * @param InputInterface  $input  An InputInterface instance.
      * @param OutputInterface $output An OutputInterface instance.
      *
-     * @throws \RuntimeException When bundle can't be executed.
-     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $name = ucfirst($input->getArgument('name'));
-        $dir  = DIR_MODULES . '/' . $name;
+        $module = ucfirst($input->getArgument('module'));
 
-        if (file_exists($dir)) {
-            throw new \RuntimeException(sprintf(
-                'Unable to generate the module as the target directory "%s" exists.',
-                realpath($dir)
-            ));
-        }
+        $moduleFile = new \Starter\Generator\File\Module($module);
+        $routeFile  = new \Starter\Generator\File\Route($module);
 
-        mkdir($dir);
-
-        mkdir($dir . '/config');
-        file_put_contents($dir . '/config/routes.config.php', <<<EOT
-<?php
-/**
- * Routes for the $name module.
- */
-
-namespace $name;
-
-use Silex\Application;
-
-return [
-    
-];
-
-EOT
-        );
-
-        mkdir($dir . '/src');
-        file_put_contents($dir . '/src/Module.php', <<<EOT
-<?php
-
-namespace $name;
-
-use Starter\Core\Module\StarterModule;
-
-/**
- * Module class for the $name module.
- *
- * @package $name
- */
-class Module extends StarterModule
-{
-}
-
-EOT
-        );
+        $moduleFile->create();
+        $routeFile->create();
     }
 }

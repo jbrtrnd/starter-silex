@@ -73,6 +73,7 @@ class Module extends StarterModule
             
             $console->addCommands([
                 new \Starter\Generator\Command\Module,
+                new \Starter\Generator\Command\Entity,
                 new \Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand,
                 new \Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand,
                 new \Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand,

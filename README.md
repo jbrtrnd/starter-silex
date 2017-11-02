@@ -28,6 +28,7 @@ Be careful, this starter has a strong dependency with Silex and Doctrine, you sh
     * [Entity serializing](#entity-serializing)
     * [Entity field validation](#entity-field-validation)
     * [Query relationships](#query-relationships)
+* [Code generator](#code-generator)
 * [Automated Grunt tasks](#automated-grunt-tasks)
     * [Checking code style](#checking-code-style)
     * [Running tests](#running-tests)
@@ -946,6 +947,22 @@ class MyEntityRepository extends RestRepository
 From now you can make an HTTP ``GET`` request to search your entities and query them by their relations.
 
 First level relationships should be prefixed by ``o.``.
+
+## Code generator
+
+The starter provides commands allowing you to generate some code :
+
+```shell
+php bin/console starter:generate:module MyModule
+```
+
+Will generate an empty module.
+
+```shell
+php bin/console starter:generate:entity MyModule MyEntity
+```
+
+Will generate an empty REST entity in the defined module with controllers and routes.
 
 ## Automated Grunt tasks
 
