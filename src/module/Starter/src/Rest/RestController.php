@@ -363,8 +363,9 @@ class RestController
     /**
      * Hydrate an object from array values.
      *
-     * @param mixed[]    $data   Values to set.
-     * @param RestEntity $object Object to hydrate.
+     * @param mixed[]    $data    Values to set.
+     * @param RestEntity $object  Object to hydrate.
+     * @param bool       $partial Should we partial hydrate the object ?
      *
      * @return object|RestEntity
      */

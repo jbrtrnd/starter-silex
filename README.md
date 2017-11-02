@@ -906,7 +906,46 @@ class MyEntity extends RestEntity
 
 ### Query relationships
 
-TODO
+If your entity has some relationship (Many-to-Many, One-to-Many...) and you want to perform some search queries based on
+theses relationships, you'll have to do some joins somewhere !
+
+The ``RestRepository`` use its internal ``search`` function to build and execute a Doctrine ``QueryBuilder`` from params
+retrieved via the ``RestController``.
+
+Extending the ``RestRepository`` for your custom entity allows you to override two functions :
+* ``beforeSearchCriteria(QueryBuilder $queryBuilder, ?array &$criteria): void``
+
+Allows you to modify the criteria that will be used by the QueryBuilder.
+
+* ``beforeSearchExecute(QueryBuilder $queryBuilder): void``
+
+Allows you to modify the QueryBuilder just before it's execution (when completely configured).
+
+Most of the time, you'll have to modify the QueryBuilder to add some joins to your query :
+
+```php
+<?php
+    
+namespace MyModule\Repository;
+    
+use Doctrine\ORM\QueryBuilder;
+use Starter\Rest\RestRepository;
+    
+class MyEntityRepository extends RestRepository
+{
+    protected function beforeSearchCriteria(QueryBuilder $queryBuilder, ?array &$criteria): void
+    {
+        $queryBuilder->join('o.relation', 'relation');
+        $queryBuilder->leftJoin('o.relation2', 'relation2');
+        $queryBuilder->join('relation2.subRelation', 'subRelation');
+    }
+}
+    
+```
+
+From now you can make an HTTP ``GET`` request to search your entities and query them by their relations.
+
+First level relationships should be prefixed by ``o.``.
 
 ## Automated Grunt tasks
 

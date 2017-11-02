@@ -3,6 +3,7 @@
 namespace Starter\Rest;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * The basic starter REST repository.
@@ -31,19 +32,26 @@ class RestRepository extends EntityRepository
      *
      * @return array The retrieved rows.
      */
-    public function search(array $criteria = null, array $orderBy = null, string $mode = 'and', int $limit = null, int $offset = null)
-    {
+    public function search(
+        array $criteria = null,
+        array $orderBy = null,
+        string $mode = 'and',
+        int $limit = null,
+        int $offset = null
+    ) {
         $queryBuilder = $this->createQueryBuilder('o');
         $queryBuilder->select('o');
+
+        $this->beforeSearchCriteria($queryBuilder, $criteria);
 
         // Filtering
         if ($criteria) {
             $i = 0;
-            foreach ($criteria as $condition) {
-                $property = $condition['property'];
-                $operator = $condition['operator'];
-                $value    = $condition['value'];
-                $noDot    = $condition['noDot'] ?? false;
+            foreach ($criteria as $criterion) {
+                $property = $criterion['property'];
+                $operator = $criterion['operator'];
+                $value    = $criterion['value'];
+                $noDot    = $criterion['noDot'] ?? false;
 
                 // Add the "o." prefix if not dot found
                 if (strrpos($property, '.') === false && !$noDot) {
@@ -54,7 +62,7 @@ class RestRepository extends EntityRepository
                     $value = explode(',', $value);
                 }
 
-                $predicate = $queryBuilder->expr()->$operator($property,  ':o' . $i);
+                $predicate = $queryBuilder->expr()->$operator($property, ':o' . $i);
                 $queryBuilder->{$mode . 'Where'}($predicate);
                 $queryBuilder->setParameter('o' . $i, $value);
                 $i++;
@@ -76,6 +84,34 @@ class RestRepository extends EntityRepository
             }
         }
 
+        $this->beforeSearchExecute($queryBuilder);
+
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Allow you to perform some specific code before the Doctrine conversion of the array of criteria to Doctrine
+     * Query builder expressions.
+     *
+     * Useful to add joins.
+     *
+     * @param QueryBuilder $queryBuilder The current query builder.
+     * @param array|null   $criteria     The criteria.
+     *
+     * @return void
+     */
+    protected function beforeSearchCriteria(QueryBuilder $queryBuilder, ?array &$criteria): void
+    {
+    }
+
+    /**
+     * Allow you to perform som specific code before query executing.
+     *
+     * @param QueryBuilder $queryBuilder
+     *
+     * @return void
+     */
+    protected function beforeSearchExecute(QueryBuilder $queryBuilder): void
+    {
     }
 }
