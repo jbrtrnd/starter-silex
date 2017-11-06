@@ -41,4 +41,32 @@ abstract class File
 
         file_put_contents($this->getFilename(), $this->generate());
     }
+
+    /**
+     * Backup a file by creating the same file with -old at the end of the name.
+     *
+     * @param string $filename
+     *
+     * @throws \RuntimeException When the file doesn't exist.
+     *
+     * @return void
+     */
+    protected function backup(string $filename): void
+    {
+        if (!file_exists($filename)) {
+            throw new \RuntimeException('Error while backing up ' . $filename . ' : File doesn\'t exist.');
+        }
+
+        $destination = $filename . '-old';
+
+        if (file_exists($destination)) {
+            $i = 1;
+            while (file_exists($destination . '-' . $i)) {
+                $i++;
+            }
+            $destination .= '-' . $i;
+        }
+
+        copy($filename, $destination);
+    }
 }

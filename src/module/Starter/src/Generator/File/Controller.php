@@ -115,13 +115,15 @@ EOT;
     /**
      * Write routes and controllers in the routes config file.
      *
-     * TODO : backup the file before modifying it
-     *
      * @return void
      */
     protected function writeRoutes(): void
     {
-        $base = file_get_contents(DIR_MODULES . '/' . $this->module . '/config/routes.config.php');
+        $filename = DIR_MODULES . '/' . $this->module . '/config/routes.config.php';
+
+        $this->backup($filename);
+
+        $base = file_get_contents($filename);
 
         $content = '';
 
@@ -185,6 +187,6 @@ EOT;
         $content .= $routes[2];
         $content .= rtrim($routes[3]) . PHP_EOL;
 
-        file_put_contents(DIR_MODULES . '/' . $this->module . '/config/routes.config.php', $content);
+        file_put_contents($filename, $content);
     }
 }
