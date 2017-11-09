@@ -963,6 +963,8 @@ php bin/console starter:generate:entity MyModule MyEntity
 ```
 
 Will generate an empty REST entity in the defined module with controllers and routes.
+As the generation will modify the file ``routes.config.php``, a backup file named ``routes.config.php-old`` will be 
+created.
 
 ## Automated Grunt tasks
 
