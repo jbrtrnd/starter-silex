@@ -11,7 +11,7 @@
 define('APP_ENV', getenv('APP_ENV'));
 
 // Application version
-define('VERSION', '1.2.0');
+define('VERSION', '1.2.1');
 
 // Directory containing Composer vendors and autoload
 define('DIR_VENDORS', '../vendor');
