@@ -177,6 +177,7 @@ class RestController
         // Total for pagination in "X-REST-TOTAL" header
         if ($limit !== null && $offset !== null) {
             $total = sizeOf($this->repository->search($orderBy));
+            $headers['Access-Control-Expose-Headers'] = 'X-REST-TOTAL';
             $headers['X-REST-TOTAL'] = $total;
         }
 

@@ -131,6 +131,10 @@ abstract class StarterModule
 
                         $this->loadMiddlewares($route, $definition, 'before');
                         $this->loadMiddlewares($route, $definition, 'after');
+
+                        $route->after(function (Request $request, Response $response) {
+                            $response->headers->set('Access-Control-Allow-Origin', '*');
+                        });
                     }
                 }
             }
