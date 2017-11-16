@@ -57,7 +57,7 @@ return [
             ],
             'DELETE' => [
                 'controller' => 'example.controller.bar',
-                'action'     => 'delete'
+                'action'     => 'remove'
             ],
         ],
     ]

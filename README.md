@@ -253,7 +253,7 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``<property-name>-<operator>`` : filter by any entity property and set the operator to apply, see Doctrine expr operators
     
     By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
-    If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
+    A custom response header named "X-REST-TOTAL" will contain the total number of rows.
 
 * **Retrieve an entity by its primary key value**
     
