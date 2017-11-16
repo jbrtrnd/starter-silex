@@ -94,7 +94,6 @@ use Starter\Rest\RestController;
  * The REST controller for the $this->entity entity.
  *
  * @package $this->module\Controller
- * @author  Jules Bertrand <jules.brtrnd@gmail.com>
  */
 class $this->controller extends RestController
 {
@@ -168,7 +167,7 @@ EOT;
                 'action'     => 'create'
             ],
         ],
-        '$entityRoute/:id' => [
+        '$entityRoute/{id}' => [
             'GET' => [
                 'controller' => '$controllerKey',
                 'action'     => 'get'
