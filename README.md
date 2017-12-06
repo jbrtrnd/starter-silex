@@ -253,7 +253,7 @@ A ``RestController`` correctly mapped to its routes will produce the following a
     * ``<property-name>-<operator>`` : filter by any entity property and set the operator to apply, see Doctrine expr operators
     
     By default, all entities will be retrieved, you can pass query parameters to limit or filter results :
-    If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
+    A custom response header named "X-REST-TOTAL" will contain the total number of rows.
 
 * **Retrieve an entity by its primary key value**
     
@@ -512,7 +512,7 @@ by don't put them in the array key.
 
 As Silex provide the functionnality to affect "before" and "after" middlewares to routes we can do the same thing with the starter.
 
-To create a Middleware, create a class which extends the abstract ``StarterMiddleware`` class. You must write the ``call()`` function taht will be 
+To create a Middleware, create a class which extends the abstract ``StarterMiddleware`` class. You must write the ``call()`` function that will be
 called when the middleware will be executed (after and/or before).
 
 To set the middleware to a route, let's get back to the routes configuration file :
@@ -556,8 +556,8 @@ return [
 Just add the ``after`` and/or ``before`` key to your route definition with an array containing the classes of the middlewares
 that you want to execute.
 
-Inside the ``call()`` function, you'll have access to the ``$this->request`` (current HTTP request) and 
-``$this->application`` (Silex application).
+Inside the ``call()`` function, you'll have access to the ``$this->request`` (current HTTP request), ``$this->application``
+(Silex application) and ``$this->response`` (current HTTP response, will be null if the middleware is called as a before middleware).
 Return ``null`` if the request should continue to the next processing or return a ``Reponse`` if you want to stop the 
 request processing at the middleware.
 

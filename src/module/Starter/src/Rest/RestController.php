@@ -104,7 +104,7 @@ class RestController
      * see doctrine expr operators
      *
      * By default, all entities will be retrieved, you can pass query parameters to limit or filter results
-     * If you're using pagination, a custom response header named "X-REST-TOTAL" will contain the total number of rows.
+     * A custom response header named "X-REST-TOTAL" will contain the total number of rows.
      *
      * @param Request $request The current HTTP request.
      *
@@ -174,12 +174,14 @@ class RestController
         // Repository call
         $rows = $this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($criteria, $orderBy, $mode, $limit, $offset);
 
-        // Total for pagination in "X-REST-TOTAL" header
+        $total = sizeOf($rows);
+        // Total for pagination
         if ($limit !== null && $offset !== null) {
             $total = sizeOf($this->repository->search($orderBy));
-            $headers['Access-Control-Expose-Headers'] = 'X-REST-TOTAL';
-            $headers['X-REST-TOTAL'] = $total;
         }
+
+        $headers['Access-Control-Expose-Headers'] = 'X-REST-TOTAL';
+        $headers['X-REST-TOTAL'] = $total;
 
         return new JsonResponse($this->serializeAll($rows, $request), Response::HTTP_OK, $headers);
     }

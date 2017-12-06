@@ -35,6 +35,8 @@ class Service
      * Service constructor.
      *
      * @param Container $application The Silex container.
+     *
+     * @throws ModuleClassNotFoundException If the Module class is not found.
      */
     public function __construct(Container $application)
     {

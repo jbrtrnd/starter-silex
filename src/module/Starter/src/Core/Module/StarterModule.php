@@ -131,10 +131,6 @@ abstract class StarterModule
 
                         $this->loadMiddlewares($route, $definition, 'before');
                         $this->loadMiddlewares($route, $definition, 'after');
-
-                        $route->after(function (Request $request, Response $response) {
-                            $response->headers->set('Access-Control-Allow-Origin', '*');
-                        });
                     }
                 }
             }
@@ -174,8 +170,9 @@ abstract class StarterModule
                         $class
                     ) {
                         $application = $type === 'after' ? $arg2 : $arg1;
+                        $response    = $type === 'after' ? $arg1 : null;
 
-                        $middleware = new $class($request, $application);
+                        $middleware = new $class($request, $response, $application);
                         if (!$middleware instanceof StarterMiddleware) {
                             throw new WrongMiddlewareClassException($class);
                         }

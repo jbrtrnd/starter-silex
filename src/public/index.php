@@ -2,7 +2,7 @@
 /**
  * Application document root.
  *
- * @author  Jules Bertrand <jules.brtrnd@gmail.com>
+ * @author Jules Bertrand <jules.brtrnd@gmail.com>
  */
 
 // Reset the execution directory to project root

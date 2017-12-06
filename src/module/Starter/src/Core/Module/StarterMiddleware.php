@@ -27,14 +27,21 @@ abstract class StarterMiddleware
     protected $request;
 
     /**
+     * @var Response The current HTTP response (only in after middleware).
+     */
+    protected $response;
+
+    /**
      * StarterMiddleware constructor.
      *
-     * @param Request     $request     The current HTTP request.
-     * @param Application $application The silex application.
+     * @param Request       $request     The current HTTP request.
+     * @param Response|null $response    The current HTTP response (only in after middleware).
+     * @param Application   $application The silex application.
      */
-    public function __construct(Request $request, Application $application)
+    public function __construct(Request $request, ?Response $response, Application $application)
     {
         $this->request     = $request;
+        $this->response    = $response;
         $this->application = $application;
     }
 

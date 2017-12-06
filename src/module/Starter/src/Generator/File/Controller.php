@@ -178,7 +178,7 @@ EOT;
             ],
             'DELETE' => [
                 'controller' => '$controllerKey',
-                'action'     => 'delete'
+                'action'     => 'remove'
             ],
         ],
 EOT;
