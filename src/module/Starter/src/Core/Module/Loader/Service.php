@@ -37,6 +37,8 @@ class Service
      * Service constructor.
      *
      * @param Container $application The Silex container.
+     *
+     * @throws ModuleClassNotFoundException If the Module class is not found.
      */
     public function __construct(Container $application)
     {
@@ -61,12 +63,15 @@ class Service
             $module->afterApplicationLoad();
         }
 
-        $this->application->after(function (Request $request, Response $response) {
-            // TODO :  move this in configuration ?
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Access-Control-Allow-Headers', 'Content-Type');
-            $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        });
+        $configuration = $this->application['starter.configuration'];
+        if (isset($configuration['http']['response']['header'])) {
+            $headers = $configuration['http']['response']['header'];
+            $this->application->after(function (Request $request, Response $response) use ($headers) {
+                foreach ($headers as $key => $value) {
+                    $response->headers->set($key, $value);
+                }
+            });
+        }
 
         $this->loaded = true;
     }

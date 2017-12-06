@@ -10,5 +10,16 @@
 
 return [
     // Entry for testing purpose, please do not delete it
-    'test' => true
+    'test' => true,
+    // Default configuration to manage global HTTP responses
+    'http' => [
+        'response' => [
+            // Add custom headers you want to be added in all your HTTP responses
+            'headers' => [
+                'Access-Control-Allow-Origin'  => '*',
+                'Access-Control-Allow-Headers' => 'Content-Type',
+                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS'
+            ]
+        ]
+    ]
 ];
