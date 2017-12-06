@@ -5,8 +5,6 @@ namespace Starter\Core\Module\Loader;
 use Pimple\Container;
 use Starter\Core\Module\Loader\Exception\ModuleClassNotFoundException;
 use Starter\Core\Module\StarterModule;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Module loader service.
@@ -61,16 +59,6 @@ class Service
 
         foreach ($this->modules as $module) {
             $module->afterApplicationLoad();
-        }
-
-        $configuration = $this->application['starter.configuration'];
-        if (isset($configuration['http']['response']['header'])) {
-            $headers = $configuration['http']['response']['header'];
-            $this->application->after(function (Request $request, Response $response) use ($headers) {
-                foreach ($headers as $key => $value) {
-                    $response->headers->set($key, $value);
-                }
-            });
         }
 
         $this->loaded = true;

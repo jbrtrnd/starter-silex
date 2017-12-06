@@ -170,8 +170,9 @@ abstract class StarterModule
                         $class
                     ) {
                         $application = $type === 'after' ? $arg2 : $arg1;
+                        $response    = $type === 'after' ? $arg1 : null;
 
-                        $middleware = new $class($request, $application);
+                        $middleware = new $class($request, $response, $application);
                         if (!$middleware instanceof StarterMiddleware) {
                             throw new WrongMiddlewareClassException($class);
                         }

@@ -10,6 +10,8 @@ use Starter\Doctrine\ServiceProvider as DoctrineServiceProvider;
 use Starter\Doctrine\Subscriber\TimestampableSubscriber;
 use Symfony\Component\Console\Application as Console;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Module class for the Starter module.
@@ -48,8 +50,19 @@ class Module extends StarterModule
      */
     public function afterApplicationLoad(): void
     {
+        $configuration = $this->application['starter.configuration'];
+
         if (isset($configuration['doctrine']['dbal'])) {
             $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
+        }
+
+        if (isset($configuration['http']['response']['header'])) {
+            $headers = $configuration['http']['response']['header'];
+            $this->application->after(function (Request $request, Response $response) use ($headers) {
+                foreach ($headers as $key => $value) {
+                    $response->headers->set($key, $value);
+                }
+            });
         }
     }
 
