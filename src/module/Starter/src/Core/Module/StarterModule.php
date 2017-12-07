@@ -86,6 +86,16 @@ abstract class StarterModule
     }
 
     /**
+     * Get the module configuration.
+     *
+     * @return Configuration The module configuration.
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
+    /**
      * Load the controllers from the configurations files in the Silex container.
      *
      * The controllers must be at the "controllers" key, see

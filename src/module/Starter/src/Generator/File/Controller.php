@@ -88,6 +88,7 @@ class Controller extends File
 namespace $this->module\Controller;
 
 use Silex\Application;
+use Starter\Rest\Exception\RepositorySearchFunctionNotFoundException;
 use Starter\Rest\RestController;
 
 /**

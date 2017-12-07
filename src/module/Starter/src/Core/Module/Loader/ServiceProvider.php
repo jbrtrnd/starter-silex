@@ -27,8 +27,8 @@ class ServiceProvider implements ServiceProviderInterface
     public function register(Container $application): void
     {
         $loader = new Service($application);
-        $loader->load();
-
         $application['starter.module.loader'] = $loader;
+
+        $loader->load();
     }
 }
