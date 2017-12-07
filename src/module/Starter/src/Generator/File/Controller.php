@@ -101,6 +101,8 @@ class $this->controller extends RestController
      * $this->controller constructor.
      *
      * @param Application \$application
+     *
+     * @throws RepositorySearchFunctionNotFoundException If the repository don't contain the REST search function.
      */
     public function __construct(Application \$application)
     {
