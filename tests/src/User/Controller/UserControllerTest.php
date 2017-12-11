@@ -17,43 +17,35 @@ class UserControllerTest extends BootstrapTestCase
     public function testGetUsersRoute()
     {
         $client  = $this->createClient();
-        $client->request('GET', '/user/user');
+        $client->request('GET', '/user');
         $this->assertFalse($client->getResponse()->isInvalid());
     }
     
     public function testGetUserRoute()
     {
         $client  = $this->createClient();
-        $client->request('GET', '/user/user/1');
-        $this->assertFalse($client->getResponse()->isInvalid());
-        
-        $client  = $this->createClient();
-        $client->request('GET', '/user/user');
-        $this->assertFalse($client->getResponse()->isInvalid());
-
-        $client  = $this->createClient();
-        $client->request('GET', '/user/user');
+        $client->request('GET', '/user/random_id');
         $this->assertFalse($client->getResponse()->isInvalid());
     }
     
     public function testCreateUserRoute()
     {
         $client  = $this->createClient();
-        $client->request('POST', '/user/user');
+        $client->request('POST', '/user');
         $this->assertFalse($client->getResponse()->isInvalid());
     }
     
     public function testUpdateUserRoute()
     {
         $client  = $this->createClient();
-        $client->request('PUT', '/user/user/1');
+        $client->request('PUT', '/user/random_id');
         $this->assertFalse($client->getResponse()->isInvalid());
     }
     
     public function testDeleteUserRoute()
     {
         $client  = $this->createClient();
-        $client->request('DELETE', '/user/user/1');
+        $client->request('DELETE', '/user/random_id');
         $this->assertFalse($client->getResponse()->isInvalid());
     }
 }

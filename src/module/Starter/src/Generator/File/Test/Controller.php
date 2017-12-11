@@ -100,46 +100,38 @@ class {$this->controller}Test extends BootstrapTestCase
         \$this->assertInstanceOf({$this->controller}::class, \$this->app['$controllerKey']);
     }
     
-    public function testGetUsersRoute()
+    public function testGet{$this->entity}sRoute()
     {
         \$client  = \$this->createClient();
         \$client->request('GET', '$entityRoute');
         \$this->assertFalse(\$client->getResponse()->isInvalid());
     }
     
-    public function testGetUserRoute()
+    public function testGet{$this->entity}Route()
     {
         \$client  = \$this->createClient();
-        \$client->request('GET', '$entityRoute/1');
-        \$this->assertFalse(\$client->getResponse()->isInvalid());
-        
-        \$client  = \$this->createClient();
-        \$client->request('GET', '$entityRoute');
-        \$this->assertFalse(\$client->getResponse()->isInvalid());
-
-        \$client  = \$this->createClient();
-        \$client->request('GET', '$entityRoute');
+        \$client->request('GET', '$entityRoute/random_id');
         \$this->assertFalse(\$client->getResponse()->isInvalid());
     }
     
-    public function testCreateUserRoute()
+    public function testCreate{$this->entity}Route()
     {
         \$client  = \$this->createClient();
         \$client->request('POST', '$entityRoute');
         \$this->assertFalse(\$client->getResponse()->isInvalid());
     }
     
-    public function testUpdateUserRoute()
+    public function testUpdate{$this->entity}Route()
     {
         \$client  = \$this->createClient();
-        \$client->request('PUT', '$entityRoute/1');
+        \$client->request('PUT', '$entityRoute/random_id');
         \$this->assertFalse(\$client->getResponse()->isInvalid());
     }
     
-    public function testDeleteUserRoute()
+    public function testDelete{$this->entity}Route()
     {
         \$client  = \$this->createClient();
-        \$client->request('DELETE', '$entityRoute/1');
+        \$client->request('DELETE', '$entityRoute/random_id');
         \$this->assertFalse(\$client->getResponse()->isInvalid());
     }
 }
