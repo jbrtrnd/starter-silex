@@ -19,7 +19,7 @@ return [
         '/user/user' => [
             'GET' => [
                 'controller' => 'user.controller.user',
-                'action'     => 'search'
+                'action'     => 'search',
             ],
             'POST' => [
                 'controller' => 'user.controller.user',

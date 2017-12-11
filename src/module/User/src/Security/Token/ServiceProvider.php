@@ -6,7 +6,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use User\Security\Middleware\CurrentUserMiddleware;
+use User\Security\Middleware\User\CurrentUserMiddleware;
 
 /**
  * Token service provider.
