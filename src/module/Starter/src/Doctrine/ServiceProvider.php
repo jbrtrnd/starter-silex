@@ -28,7 +28,7 @@ class ServiceProvider implements ServiceProviderInterface
     {
         $configuration = $application['starter.configuration'];
 
-        if (isset($configuration['doctrine']['dbal'])) {
+        if (isset($configuration['doctrine']['dbal']) && !isset($application['dbs'])) {
             $application->register(new DoctrineServiceProvider(), [
                 'dbs.options' => $configuration['doctrine']['dbal']
             ]);

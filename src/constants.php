@@ -11,7 +11,7 @@
 define('APP_ENV', getenv('APP_ENV'));
 
 // Application version
-define('VERSION', '1.2.2');
+define('VERSION', '1.3.0');
 
 // Directory containing Composer vendors and autoload
 define('DIR_VENDORS', '../vendor');
@@ -24,3 +24,6 @@ define('DIR_CONFIG', 'config');
 
 // Directory containing application data
 define('DIR_DATA', 'data');
+
+// Directory application tests
+define('DIR_TESTS', '../tests/src');

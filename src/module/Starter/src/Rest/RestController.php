@@ -242,6 +242,8 @@ class RestController
      *
      * @param Request $request The current HTTP request.
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
@@ -296,6 +298,8 @@ class RestController
      * @param mixed   $id      The primary key value of the entity to update.
      * @param Request $request The current HTTP request.
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return JsonResponse
      */
     public function update($id, Request $request): JsonResponse
@@ -336,6 +340,8 @@ class RestController
      *
      * @param mixed   $id      The primary key value of the entity to remove.
      * @param Request $request The current HTTP request.
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return JsonResponse
      */

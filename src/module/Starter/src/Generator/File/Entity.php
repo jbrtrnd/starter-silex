@@ -107,6 +107,36 @@ use Zend\InputFilter\InputFilterInterface;
 class $this->entity extends RestEntity
 {
     /**
+     * @var int
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected \$id;
+    
+    /**
+     * Return the id property value.
+     *
+     * @return int The id property value.
+     */
+    public function getId(): ?int
+    {
+        return \$this->id;
+    }
+
+    /**
+     * Set the id property value.
+     *
+     * @param int \$id The value to set.
+     *
+     * @return void
+     */
+    public function setId(?int \$id): void
+    {
+        \$this->id = \$id;
+    }
+    
+    /**
      * Convert the current object into json array.
      *
      * @return array The serialized entity.
@@ -114,6 +144,7 @@ class $this->entity extends RestEntity
     public function jsonSerialize(): array
     {
         return [
+            'id' => \$this->getId()
             // TODO : add serialized fields
         ];
     }
@@ -129,6 +160,9 @@ class $this->entity extends RestEntity
     {
         \$factory = new Factory();
         return \$factory->createInputFilter([
+            'id' => [
+                'required' => false
+            ],
             // TODO : add validation rules
         ]);
     }

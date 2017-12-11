@@ -56,8 +56,8 @@ class Module extends StarterModule
             $this->application['orm.em']->getEventManager()->addEventSubscriber(new TimestampableSubscriber());
         }
 
-        if (isset($configuration['http']['response']['header'])) {
-            $headers = $configuration['http']['response']['header'];
+        if (isset($configuration['http']['response']['headers'])) {
+            $headers = $configuration['http']['response']['headers'];
             $this->application->after(function (Request $request, Response $response) use ($headers) {
                 foreach ($headers as $key => $value) {
                     $response->headers->set($key, $value);
