@@ -2,6 +2,7 @@
 
 namespace Starter\Generator\Command;
 
+use Starter\Generator\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,10 +40,12 @@ class Module extends Command
     {
         $module = ucfirst($input->getArgument('module'));
 
-        $moduleFile = new \Starter\Generator\File\Module($module);
-        $routeFile  = new \Starter\Generator\File\Route($module);
+        $moduleFile     = new File\Module($module);
+        $moduleTestFile = new File\Test\Module($module);
+        $routeFile      = new File\Route($module);
 
         $moduleFile->create();
+        $moduleTestFile->create();
         $routeFile->create();
     }
 }

@@ -97,6 +97,18 @@ class Service
     }
 
     /**
+     * Retrieve a module with its name.
+     *
+     * @param string $name The module to retrieve.
+     *
+     * @return null|StarterModule The retrieved module.
+     */
+    public function getModule(string $name): ?StarterModule
+    {
+        return $this->modules[$name] ?? null;
+    }
+
+    /**
      * Retrieve the modules to load.
      *
      * The modules are set in the $modules property with their name as key and the Module class instance as value.

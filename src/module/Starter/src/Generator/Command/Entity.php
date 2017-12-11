@@ -41,12 +41,14 @@ class Entity extends Command
         $module = $input->getArgument('module');
         $entity = $input->getArgument('entity');
 
-        $entityFile     = new \Starter\Generator\File\Entity($entity, $module);
-        $repositoryFile = new \Starter\Generator\File\Repository($entity, $module);
-        $controllerFile = new \Starter\Generator\File\Controller($entity, $module);
+        $entityFile         = new \Starter\Generator\File\Entity($entity, $module);
+        $repositoryFile     = new \Starter\Generator\File\Repository($entity, $module);
+        $controllerFile     = new \Starter\Generator\File\Controller($entity, $module);
+        $controllerTestFile = new \Starter\Generator\File\Test\Controller($entity, $module);
 
         $entityFile->create();
         $repositoryFile->create();
         $controllerFile->create();
+        $controllerTestFile->create();
     }
 }

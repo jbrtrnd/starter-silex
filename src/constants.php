@@ -24,3 +24,6 @@ define('DIR_CONFIG', 'config');
 
 // Directory containing application data
 define('DIR_DATA', 'data');
+
+// Directory application tests
+define('DIR_TESTS', '../tests/src');
