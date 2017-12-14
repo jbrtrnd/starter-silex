@@ -112,14 +112,15 @@ class RestController
      */
     public function search(Request $request): JsonResponse
     {
+        $query   = $request->query;
         $headers = [];
 
         // Pagination
         $limit  = null;
         $offset = null;
 
-        $page     = $request->get('page', $request->get('_p', false));
-        $per_page = $request->get('per_page', $request->get('_pp', false));
+        $page     = $query->get('page', $query->get('_p', false));
+        $per_page = $query->get('per_page', $query->get('_pp', false));
 
         if ($page && $per_page) {
             if ($page && $page <= 0) {
@@ -137,7 +138,7 @@ class RestController
         // Sorting
         $orderBy = null;
 
-        $sort = $request->get('sort', $request->get('_s', false));
+        $sort = $query->get('sort', $query->get('_s', false));
 
         if ($sort) {
             foreach (explode(',', $sort) as $column) {
@@ -166,7 +167,7 @@ class RestController
         }
 
         // Mode
-        $mode = $request->get('mode', $request->get('_m', 'and'));
+        $mode = $query->get('mode', $query->get('_m', 'and'));
         if (!in_array($mode, ['and', 'or'])) {
             $mode = 'and';
         }
@@ -413,9 +414,10 @@ class RestController
      */
     protected function serialize(RestEntity $object, Request $request): array
     {
-        $res = $object->jsonSerialize();
+        $query = $request->query;
+        $res   = $object->jsonSerialize();
 
-        $embed = $request->get('embed', $request->get('_e', false));
+        $embed = $query->get('embed', $query->get('_e', false));
         if ($embed) {
             $embed        = explode(',', $embed);
             $res['embed'] = Serializer::serialize($object, $embed);
