@@ -58,14 +58,18 @@ class RestRepository extends EntityRepository
                     $property = 'o.' . $property;
                 }
 
-                if ($operator == 'in') {
+                if ($operator === 'in') {
                     $value = explode(',', $value);
                 }
 
-                $predicate = $queryBuilder->expr()->$operator($property, ':o' . $i);
+                if ($operator === 'isNull') {
+                    $predicate = $queryBuilder->expr()->$operator($property);
+                } else {
+                    $predicate = $queryBuilder->expr()->$operator($property, ':o' . $i);
+                    $queryBuilder->setParameter('o' . $i, $value);
+                    $i++;
+                }
                 $queryBuilder->{$mode . 'Where'}($predicate);
-                $queryBuilder->setParameter('o' . $i, $value);
-                $i++;
             }
         }
 
