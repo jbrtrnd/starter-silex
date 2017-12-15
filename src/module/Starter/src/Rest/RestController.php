@@ -178,7 +178,7 @@ class RestController
         $total = sizeOf($rows);
         // Total for pagination
         if ($limit !== null && $offset !== null) {
-            $total = sizeOf($this->repository->search($orderBy));
+            $total = sizeOf($this->repository->{self::REPOSITORY_SEARCH_FUNCTION}($criteria, $orderBy, $mode));
         }
 
         $headers['Access-Control-Expose-Headers'] = 'X-REST-TOTAL';
